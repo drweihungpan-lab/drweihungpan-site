@@ -2,7 +2,32 @@
 
 - **Date:** 2026-10-31
 - **Owner:** Dr. Wei-Hung Pan
-- **Status:** Approved design. Implementation plan not yet written.
+- **Status:** Approved design, **partly superseded**. See the notice below.
+
+## Superseded in part
+
+This design was approved on 2026-10-31 and is **partly superseded the same day**
+by the v1 build spec, issue [#1](https://github.com/drweihungpan-lab/drweihungpan-site/issues/1) — *"Spec: v1 site — Engineering +
+Analysis lead offer, talk-driven funnel, bilingual core"*. **Where the two
+documents disagree, the spec wins.**
+
+Sections 2, 3, 4, 5, 6, 8, 10 and 11 are superseded in whole or in part and each
+carries a notice saying so. Nothing here has been deleted: the reasoning that
+led to each original decision is kept, so that a future reader can see both what
+was decided here and that it was later overridden, and why. Sections 1, 7, 9, 12
+and 13 stand as written.
+
+Two of the overriding decisions are recorded as ADRs rather than left in the
+spec:
+
+- [ADR-0001](../../adr/0001-engineering-and-analysis-as-lead-offer.md) — the lead offer
+  moving from publication statistics to Engineering and Analysis.
+- [ADR-0002](../../adr/0002-credit-policy-for-analysis.md) — the credit policy for
+  Analysis.
+
+Vocabulary: the spec and the ADRs use the canonical terms in `GLOSSARY.md`
+(Researcher, Client, Engineering, Analysis, Coaching, Workshop, Course). This
+document predates the glossary and uses looser language in places.
 
 ## 1. Purpose
 
@@ -48,6 +73,17 @@ corrected if wrong:
 
 ## 2. Positioning
 
+> **Superseded in part by spec [#1](https://github.com/drweihungpan-lab/drweihungpan-site/issues/1).** The positioning below leads
+> with biostatistics and publication proof. The spec leads with **Engineering and
+> Analysis** — building the data infrastructure a study needs *and* running its
+> statistics — for the reasons recorded in [ADR-0001](../../adr/0001-engineering-and-analysis-as-lead-offer.md).
+> The proof strip is replaced by a homepage numbers band (since 2012; 15+
+> Workshops delivered; 150+ hours across statistics, ML and AI) in which every
+> figure links to the page that evidences it, plus a separate credentials strip
+> holding publications, awards, the PhD and the teaching award: numbers sell,
+> credentials reassure. The evidence list below remains accurate and is still the
+> source for both.
+
 Biostatistics and reproducible data science for clinical research, backed by a
 decade in pharmaceutical early-phase drug development.
 
@@ -68,6 +104,27 @@ teaching ability — delivered in Mandarin or English.
   road-quality maintenance, German A70).
 
 ## 3. Audience and offers
+
+> **Superseded in part by spec [#1](https://github.com/drweihungpan-lab/drweihungpan-site/issues/1).** Offer 1 below — publication
+> statistics as the lead — is overridden: the lead offer is Engineering and
+> Analysis, and publication statistics becomes one package inside **Analysis**
+> ([ADR-0001](../../adr/0001-engineering-and-analysis-as-lead-offer.md)). Engineering covers four named
+> deliverables: a clinical data pipeline, a reproducible analysis setup, an app
+> or dashboard, a registry or cohort database. Analysis covers study design,
+> analysis, publication statistics, reviewer response, and **Coaching**.
+>
+> The primary audience is restated as the **Researcher** — a person who owns a
+> study and needs help with its data, defined by that need rather than by career
+> stage (see `GLOSSARY.md`). Offer 2 keeps its substance, but the two Course
+> pages are gone and their syllabus summaries move onto the Workshop page, where
+> they are selling something. Offer 3 stays, unpromoted and with no homepage
+> card. Platform material development is inbound-only: one sentence on the
+> Workshop page, no card, no page, no pursuit.
+>
+> The **authorship and research-ethics policy** below is superseded by the credit
+> policy, [ADR-0002](../../adr/0002-credit-policy-for-analysis.md), which decides the cases
+> this section leaves open. Fixed-scope packages, the design consult's central
+> role, and reproducible analysis code as a differentiator all survive unchanged.
 
 ### Primary audience
 
@@ -140,6 +197,23 @@ researchers that the owner knows the rules of the field they are publishing in.
 
 ## 4. Information architecture
 
+> **Superseded by spec [#1](https://github.com/drweihungpan-lab/drweihungpan-site/issues/1).** The route list below is replaced.
+> `/services/publication-stats` becomes `/services/statistics` and gains
+> `/services/engineering` beside it as the other half of the lead offer;
+> `/courses/3r` and `/courses/clinical-data` are removed; `/writing/data/` is
+> removed, since professional writing stays on Medium and the index links out to
+> it; `/teaching` is added as the record of Courses, Workshops and talks, and is
+> the source of truth for the homepage Workshop count; `/cv.pdf` is added at a
+> stable path. No talks page and no CV page are built — the teaching record and
+> the about page absorb them. Traditional Chinese exists for exactly five pages —
+> home, engineering, statistics, contact, about — not for the faith stream, the
+> teaching record, the writing index or the consulting page.
+>
+> The separation of professional and faith content below **survives and is
+> strengthened**: no faith content and no link into the faith stream on any
+> service page, the faith navigation item hidden until at least one faith piece
+> exists, and the About page's faith paragraph live from day one.
+
 English at the root. Traditional Chinese under `/zh/`. German only where legally
 required or where it adds credibility cheaply.
 
@@ -179,6 +253,24 @@ The About page carries one honest paragraph naming his faith and linking to the
 stream.
 
 ## 5. Page specifications
+
+> **Superseded in part by spec [#1](https://github.com/drweihungpan-lab/drweihungpan-site/issues/1).** The homepage composition
+> below is replaced by a fixed five-part order: bio paragraph (first person,
+> roughly four sentences, no numbers inside it, employer unnamed, naming the
+> Client's symptom); numbers band; proof block of Workshop photographs then two
+> or three named quotes with role and institution; three offer cards titled with
+> the Client's problem rather than the service name, Engineering and Analysis at
+> equal weight and Workshops the smaller third; talk-materials capture. The
+> **three most recent writing entries are removed** — at roughly four pieces a
+> year that block would show the same three links for eleven weeks out of twelve,
+> advertise the gaps, and send a warm visitor off-site. The email capture offers
+> the slides and materials from a talk, not a newsletter subscription.
+>
+> `/services/publication-stats` becomes `/services/statistics` and carries the
+> credit policy in place of the authorship policy; `/services/engineering` is
+> added; the two Course page specifications are void. The `/services/workshops`,
+> `/contact` and `/about` specifications stand, with a two-page PDF CV linked
+> from `/about` at a stable path.
 
 ### Home
 
@@ -234,6 +326,19 @@ stream.
 - Expected response time, stated honestly.
 
 ## 6. Content model
+
+> **Superseded in part by spec [#1](https://github.com/drweihungpan-lab/drweihungpan-site/issues/1).** The writing-entry frontmatter
+> schema below stands, minus the `data` stream. Added, as a deliberate second
+> kind of content: **structured records** — publications, career timeline,
+> awards, and the teaching and talks record — held as language-neutral data and
+> rendered into both languages from one source, since journal names, institution
+> names, dates and titles do not need translating and a single source removes the
+> failure mode where the English list gains a paper and the Chinese one does not.
+> **Testimonials** become structured data too, each entry carrying the quote, the
+> person's name, role and institution, the offer it refers to, and a flag
+> recording that written consent is held; an entry without that flag does not
+> render. Service pages remain content-collection entries; Course pages no longer
+> exist.
 
 Writing entries are Markdown files in an Astro content collection:
 
@@ -294,6 +399,15 @@ per page — the last matters for screen readers on mixed-language content.
 
 ## 8. Legal and compliance
 
+> **Superseded in part by spec [#1](https://github.com/drweihungpan-lab/drweihungpan-site/issues/1).** Everything below stands.
+> Added, because testimonials and Workshop photographs are now in scope: no name
+> and no identifiable face is published without written consent on file. Quotes
+> carry names, roles and institutions as personal data under GDPR with consent as
+> the legal basis, withdrawable on request; identifiable faces in photographs
+> additionally require publication consent under German image rights. The privacy
+> notice must disclose that these consent records are held, and where consent is
+> incomplete photographs are framed so that no attendee is identifiable.
+
 Operating a commercial website from Germany requires:
 
 - **Impressum** (§5 DDG, formerly §5 TMG): legal name, postal address, email,
@@ -329,6 +443,14 @@ GitHub Actions on every pull request:
 
 ## 10. Out of scope for v1
 
+> **Superseded in part by spec [#1](https://github.com/drweihungpan-lab/drweihungpan-site/issues/1).** The list below stands except
+> for its last bullet: **testimonials are now in scope**, as the homepage proof
+> block, held as structured data behind a consent flag. Case studies remain out
+> of scope — they need finished Client engagements that do not exist yet. The
+> spec adds to this list: publishing the site at all (the §12 blocker is
+> unresolved), migrating the Medium pieces onto the site (declined), published
+> prices, browser-driven and component-level tests, and tax registration.
+
 Deferred deliberately. Each is straightforward to add once the site is live and
 earning, and none should delay launch.
 
@@ -339,16 +461,27 @@ earning, and none should delay launch.
 - Comments.
 - Site search.
 - German translation beyond the Impressum and a short About page.
-- Case studies and testimonials — there are no clients yet to draw them from.
+- ~~Case studies and testimonials — there are no clients yet to draw them
+  from.~~ **Superseded by spec [#1](https://github.com/drweihungpan-lab/drweihungpan-site/issues/1):** testimonials are in scope and
+  are the homepage proof block; case studies remain out of scope.
 
 ## 11. Decisions
+
+> **Superseded in part by spec [#1](https://github.com/drweihungpan-lab/drweihungpan-site/issues/1).** The lead-offer row is
+> overridden by [ADR-0001](../../adr/0001-engineering-and-analysis-as-lead-offer.md) and is marked as
+> such below, with its original rationale kept. Added by the spec: the credit
+> policy for Analysis ([ADR-0002](../../adr/0002-credit-policy-for-analysis.md)), and
+> mobile-first reclassified from a quality goal to a **conversion requirement**,
+> so the performance budget in §7 gates merges rather than advising them. The
+> other rows stand.
 
 | Decision | Choice | Rationale |
 | --- | --- | --- |
 | Faith content placement | Same site, separate labelled section | One brand and one site to maintain; visitors choose their door; no client is ambushed on a services page. |
 | Languages | English backbone, Traditional Chinese for Taiwan-facing and faith content, German for Impressum and About only | Roughly 1.4× writing effort instead of 3×. Stale translations are worse than none, and translation burden is the main reason side-project sites go dormant. |
 | Build approach | Astro + Markdown, Git-hosted | Matches the owner's existing skills and daily Markdown habit; no lock-in; zero running cost; the site demonstrates the engineering practice he sells. |
-| Lead offer | Publication statistics for physicians | Underserved demand in Taiwan, clients who can pay, a repeatable deliverable, Mandarin as an advantage, and far lower employer conflict-of-interest exposure than pharma consulting. |
+| ~~Lead offer~~ — **superseded, see [ADR-0001](../../adr/0001-engineering-and-analysis-as-lead-offer.md)** | ~~Publication statistics for physicians~~ → Engineering and Analysis for clinical research groups | Original rationale, kept for the record: underserved demand in Taiwan, Clients who can pay, a repeatable deliverable, Mandarin as an advantage, and far lower employer conflict-of-interest exposure than pharma consulting. Overridden because the combination of Engineering and Analysis is the differentiator, publication statistics alone sells half the owner's capability, and the owner stated plainly that publication is not what he cares about. |
+| Credit policy for Analysis — **added, see [ADR-0002](../../adr/0002-credit-policy-for-analysis.md)** | If the owner's name can appear in the output he can run the Analysis; if the work is a graded assessment of the Researcher's own competence he teaches them to run it instead | Replaces the ICMJE restatement in §3 with a rule a Researcher can check before the first email. Refuses revenue deliberately: a Researcher who buys an analysis their institution expected them to perform commits misconduct, and the owner's name on the output makes the risk mutual. |
 | Pricing display | "Request a quote" in v1 | The owner has no pricing history for this market yet. Published prices set a ceiling that is hard to raise; quotes allow calibration over the first several clients. Revisit once roughly five projects are complete. |
 | Engagement shape | Fixed-scope packages | Hourly billing with this audience degrades into unbounded scope. |
 | Domain | `drweihungpan.com` (proposed) | Matches the existing `drweihungpan-lab` GitHub organisation. Owner to confirm before purchase; nothing else in this design depends on the choice. |
