@@ -5,3 +5,7 @@ dist/
 .env
 .env.*
 !.env.example
+
+# The 11.9 MB source font, cached by scripts/subset-zh-font.mjs.
+# Only the generated subset under public/fonts/ is committed.
+fonts-src/

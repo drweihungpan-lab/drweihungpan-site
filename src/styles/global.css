@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens.
+ *
+ * Latin text ships no web font: the system stack costs nothing to download
+ * and renders in the face the visitor's platform already has. The Chinese
+ * stack names the subset first; its `@font-face` is inlined on Chinese pages
+ * only, from `src/lib/fonts.ts`.
+ */
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-zh: "Noto Sans TC Subset", "PingFang TC", "Microsoft JhengHei",
+    "Noto Sans CJK TC", sans-serif;
+
+  --text-measure: 68ch;
+}
+
+/*
+ * Semantic colours, declared `inline` so that a utility compiles to the
+ * runtime variable rather than a copy of its value. A colour scheme is then
+ * one block of variables, not a `dark:` variant on every element.
+ */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-brand: var(--brand);
+  --color-on-brand: var(--on-brand);
+}
+
+:root {
+  --bg: #ffffff;
+  --surface: #f5f7fa;
+  --fg: #15181d;
+  --muted: #525a68;
+  --border: #dfe3ea;
+  --brand: #1b4f9c;
+  --on-brand: #ffffff;
+}
+
+/*
+ * The dark scheme follows the system preference and ships no toggle: a toggle
+ * needs JavaScript, and this site promises almost none. Both schemes have to
+ * pass WCAG AA on their own, so the budget runner checks both.
+ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1217;
+    --surface: #171b21;
+    --fg: #e9ebef;
+    --muted: #a6aebc;
+    --border: #2a2f38;
+    --brand: #7fb3f2;
+    --on-brand: #0f1217;
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: var(--color-brand);
+  }
+
+  /* A keyboard-only visitor must always be able to see where they are. */
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}

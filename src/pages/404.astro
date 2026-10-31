@@ -1,0 +1,18 @@
+---
+/**
+ * The page a visitor lands on when a link is wrong.
+ *
+ * English only, deliberately: Traditional Chinese exists for exactly five
+ * pages and this is not one of them. It is also the page that proves the
+ * counterpart rule's negative case — it has no Chinese version, so it
+ * announces no other language.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { href } from '../lib/i18n';
+---
+
+<BaseLayout title="Page not found — Dr. Wei-Hung Pan" description="This page does not exist.">
+  <h1>Page not found</h1>
+
+  <p>That page does not exist. <a href={href('en')}>Start from the homepage</a>.</p>
+</BaseLayout>
