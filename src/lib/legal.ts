@@ -67,15 +67,44 @@ export const operator = {
 
   /**
    * The transactional email API the contact form's host function forwards
-   * through. Chosen with the contact form itself; until then this processor is
-   * named but not identified.
+   * through.
+   *
+   * Brevo, decided with the contact form. Two criteria settled it. The free
+   * tier is permanent rather than a trial — 300 messages a day, against a form
+   * that will send a handful a week — so the site still costs nothing to run
+   * beyond the domain. And the contracting entity is French with EU data
+   * centres, which takes a third-country transfer out of the disclosure
+   * altogether: the alternatives with comparable free tiers — Resend,
+   * MailerSend, Postmark — all contract through a US entity and would each
+   * have needed an Art. 46 transfer basis stated in the table below.
+   *
+   * The registered office and register number are as Brevo's own privacy
+   * policy gives them. Brevo's pages disagree with one another about the
+   * street number, which is why the Paris register number is published beside
+   * it: that identifies the company whichever address is current.
    */
-  transactionalEmailProvider: unknown(
-    'transactional email provider for the contact form — company name, registered office and country',
-  ),
+  transactionalEmailProvider:
+    'Sendinblue SAS, trading as Brevo — 17 rue Salneuve, 75017 Paris, France (RCS Paris 498 019 298)',
 
-  /** The scheduling service the contact page links out to. */
-  schedulingProvider: unknown('scheduling service linked from the contact page — company and country'),
+  /**
+   * The scheduling service the contact page links out to.
+   *
+   * Brevo Meetings, from the same company as the transactional email above,
+   * and chosen for that reason: its booking pages are free on every plan, so a
+   * separate scheduling service would have added a second company — and, for
+   * every free option worth using, a second country — to the processor table
+   * in exchange for one link. One EU company covering both keeps the notice
+   * shorter, which is the only thing that makes a notice get read.
+   */
+  schedulingProvider: 'Sendinblue SAS, trading as Brevo — Brevo Meetings (France)',
+
+  /**
+   * The public booking page the contact page links to. Not a fact the law
+   * demands, but the owner's to supply, and held here so that it is marked as
+   * missing on the page rather than guessed at: an invented booking URL is a
+   * dead link that looks alive.
+   */
+  bookingUrl: unknown('public booking page URL on the scheduling service'),
 } as const satisfies Record<string, Fact>;
 
 /** The date the legal pages were last reviewed, shown on both. */

@@ -53,9 +53,11 @@ const processors = [
     name: 'Transactional email provider: ',
     nameFact: operator.transactionalEmailProvider,
     purpose:
-      'Carries a contact-form message from that function to my mailbox. It processes your name, your email address and the message itself in transit.',
-    basis: 'Art. 6(1)(b) or Art. 6(1)(f) GDPR, as for the contact form above.',
-    transfer: 'Confirmed with the provider before the contact form is published.',
+      'Carries a contact-form message from that function to my mailbox. It processes your name, your email address and the message itself in transit. Nothing you type is stored on this site on the way through.',
+    basis:
+      'Art. 6(1)(b) GDPR where your message concerns an engagement you are asking me to quote for, and otherwise Art. 6(1)(f) GDPR — my legitimate interest in receiving and answering an enquiry addressed to me.',
+    transfer:
+      'Inside the EU. The contracting entity is French and the service processes in EU data centres, so this processing needs no third-country transfer basis at all — which is why this provider was chosen over the equivalent American ones.',
   },
   {
     name: 'UAB MailerLite (Vilnius, Lithuania — EU)',
@@ -69,10 +71,11 @@ const processors = [
     name: 'Scheduling service: ',
     nameFact: operator.schedulingProvider,
     purpose:
-      'Offers a booking page that the contact page links out to. Nothing reaches it until you follow that link; from then on its own privacy notice governs the booking.',
+      'Offers a booking page that the contact page links out to. Nothing reaches it until you follow that link; from then on it is a controller in its own right and its own privacy notice governs the booking. It is the same company as the transactional email above, which is why this page lists one provider rather than two.',
     basis:
-      'Art. 6(1)(a) GDPR for following the link and Art. 6(1)(b) GDPR for the booking you then make.',
-    transfer: 'Confirmed with the provider before the scheduling link is published.',
+      'Art. 6(1)(a) GDPR — your consent, given by following the link — for the booking page loading at all, and Art. 6(1)(b) GDPR for the appointment you then make with me.',
+    transfer:
+      'Inside the EU, as for the transactional email above: a French entity and EU data centres, so no third-country transfer basis is needed.',
   },
 ] as const;
 ---

@@ -1,0 +1,141 @@
+---
+/**
+ * The contact form, in whichever language the page is written in.
+ *
+ * It is a plain HTML form: `method="post"`, an `action` on this host, and no
+ * script of any kind. That is the whole design. The browser validates the
+ * fields, the browser submits them, and the host function answers with a
+ * redirect — so the form works with JavaScript disabled, on a metered
+ * connection, and from a keyboard with nothing but Tab and Enter.
+ *
+ * The field labels live here rather than in the two pages because they belong
+ * to the widget, not to either page's argument: one form shipped in two
+ * languages, with one markup to keep accessible. The surrounding prose — what
+ * to write, how soon a reply comes, how else to make contact — is page copy and
+ * stays in the pages.
+ *
+ * Every control is labelled by a real `<label for>`. No field relies on a
+ * placeholder: a placeholder is not an accessible name and vanishes the moment
+ * a visitor starts typing, which is exactly when they need it.
+ */
+import type { Locale } from '../lib/i18n';
+import { endpoint, fields, limits } from '../lib/contact';
+
+interface Props {
+  /** The language this page is written in. */
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const text: Record<
+  Locale,
+  {
+    name: string;
+    email: string;
+    emailHint: string;
+    message: string;
+    messageHint: string;
+    submit: string;
+    privacy: string;
+    privacyLink: string;
+    decoy: string;
+  }
+> = {
+  en: {
+    name: 'Your name',
+    email: 'Your email address',
+    emailHint: 'I reply to this address and use it for nothing else.',
+    message: 'Your message',
+    messageHint: 'What you are working on, and where the data is stuck.',
+    submit: 'Send message',
+    privacy: 'What happens to what you send is set out in the',
+    privacyLink: 'privacy notice',
+    decoy: 'Website',
+  },
+  zh: {
+    name: '你的姓名',
+    email: '你的電子郵件',
+    emailHint: '我只用這個地址回覆你，不會用在其他地方。',
+    message: '訊息內容',
+    messageHint: '你正在做什麼研究，資料卡在哪一步。',
+    submit: '送出訊息',
+    privacy: '你送出的內容會怎麼被處理，寫在',
+    privacyLink: '隱私權聲明（英文）',
+    decoy: '網站',
+  },
+};
+
+const t = text[locale];
+---
+
+<form method="post" action={endpoint} class="mt-4 flex flex-col gap-5">
+  <!--
+    The language the visitor wrote in, so the function can send them back to
+    the confirmation page in their own language.
+  -->
+  <input type="hidden" name={fields.locale} value={locale} />
+
+  <p class="flex flex-col gap-1">
+    <label for="contact-name" class="font-semibold">{t.name}</label>
+    <input
+      id="contact-name"
+      name={fields.name}
+      type="text"
+      required
+      maxlength={limits.name}
+      autocomplete="name"
+      class="rounded border border-border bg-bg px-3 py-2"
+    />
+  </p>
+
+  <p class="flex flex-col gap-1">
+    <label for="contact-email" class="font-semibold">{t.email}</label>
+    <span id="contact-email-hint" class="text-sm text-muted">{t.emailHint}</span>
+    <input
+      id="contact-email"
+      name={fields.email}
+      type="email"
+      required
+      maxlength={limits.email}
+      autocomplete="email"
+      aria-describedby="contact-email-hint"
+      class="rounded border border-border bg-bg px-3 py-2"
+    />
+  </p>
+
+  <p class="flex flex-col gap-1">
+    <label for="contact-message" class="font-semibold">{t.message}</label>
+    <span id="contact-message-hint" class="text-sm text-muted">{t.messageHint}</span>
+    <textarea
+      id="contact-message"
+      name={fields.message}
+      required
+      rows="7"
+      maxlength={limits.message}
+      aria-describedby="contact-message-hint"
+      class="rounded border border-border bg-bg px-3 py-2"></textarea>
+  </p>
+
+  <!--
+    The honeypot. `hidden` keeps it out of the accessibility tree and out of
+    the tab order natively, with no stylesheet involved, so no visitor can
+    reach it and no screen reader announces it. See `src/lib/contact.ts`.
+  -->
+  <div hidden>
+    <label for="contact-website">{t.decoy}</label>
+    <input id="contact-website" name={fields.decoy} type="text" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <p>
+    <button
+      type="submit"
+      class="rounded bg-brand px-5 py-2.5 font-semibold text-on-brand"
+      >{t.submit}</button
+    >
+  </p>
+
+  <p class="text-sm text-muted">
+    {t.privacy} <a href="/privacy/">{t.privacyLink}</a>.
+  </p>
+</form>

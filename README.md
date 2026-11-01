@@ -80,6 +80,41 @@ edit that both pages pick up. A new processor anywhere on the site needs a row
 in the privacy notice's processor table stating its legal basis, or the suite
 fails.
 
+## The contact form
+
+`/contact/` and `/zh/contact/` carry a plain HTML form that posts to
+`functions/api/contact.ts`, a Cloudflare Pages Function served at
+`/api/contact`. The function hands the message to Brevo's transactional email
+API and answers with a 303 to `/contact/sent/` in the visitor's language.
+
+That shape is the point. There is **no third-party form embed**, so submitting
+introduces no processor beyond the one the privacy notice names and sets no
+cookie; and because the exchange is post/redirect/get, **the page ships no
+JavaScript at all** — the browser validates, the browser submits, and the
+confirmation is a static page that can be reloaded without resubmitting.
+`src/lib/contact.ts` holds the one contract the form and the function share:
+the path, the field names and the confirmation route. Nothing in it may import
+Astro at run time, because the function is bundled outside an Astro build.
+
+Three environment variables are needed on the host, `BREVO_API_KEY` as a
+secret:
+
+| Variable | What it is |
+| --- | --- |
+| `BREVO_API_KEY` | Brevo API key (v3). |
+| `CONTACT_TO` | The mailbox enquiries are delivered to. |
+| `CONTACT_FROM` | A sender address on a domain verified in Brevo. |
+
+The sender is always an address of the site's own, never the visitor's: sending
+as the visitor fails SPF and DMARC and lands the message in spam. Their address
+goes in `replyTo`, so answering the mail answers them.
+
+**The function is not covered by the suite.** The one seam is the built static
+output, which cannot run a serverless function. The suite asserts that the form
+posts to it and that the file exists, and nothing more; its validation, its API
+call and its redirects need exercising against a real deployment before the
+site is published.
+
 ## How this site is tested
 
 **One seam: the built output.** The suite builds the site once and asserts

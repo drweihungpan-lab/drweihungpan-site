@@ -1,0 +1,27 @@
+---
+/**
+ * The Traditional Chinese confirmation page. See the English one for why this
+ * page exists at all; the copy is written natively rather than translated.
+ */
+import Fact from '../../../components/Fact.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { type Fact as LegalFact, isUnknown, operator } from '../../../lib/legal';
+
+const email: LegalFact = operator.email;
+---
+
+<BaseLayout title="訊息已送出 — 潘威宏博士" description="你的訊息已經送出，我通常在三個工作日內回覆。">
+  <h1>訊息已經送出</h1>
+
+  <p>謝謝你，訊息已經進到我的信箱。我在三個工作日內回覆；遇到授課週會慢一些，最多約一週。</p>
+
+  <p>
+    如果超過一週還是沒有收到回覆，請當成訊息沒有送到，而不是我不想回。直接寄到 {
+      isUnknown(email) ? <Fact value={email} /> : <a href={`mailto:${email}`}>{email}</a>
+    }，一定會到我手上。
+  </p>
+
+  <p>
+    這個網站沒有留下你寫的內容：訊息直接交給寄信服務轉送出去。<a href="/zh/contact/">回到聯絡頁</a>。
+  </p>
+</BaseLayout>

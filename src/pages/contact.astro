@@ -1,0 +1,80 @@
+---
+/**
+ * The contact page.
+ *
+ * Four things, in the order a visitor needs them: a form, how soon a reply
+ * comes, a plain email address, and a booking link. The order is deliberate.
+ * The form is first because the page is reached by someone who has just
+ * decided to act. The response time comes next because it is what stops
+ * silence from reading as rejection — the whole point of stating it. The email
+ * address follows because a good share of this audience will not type into a
+ * web form, and they should not have to hunt for the alternative.
+ *
+ * The form posts to a function on the host, not to a third-party embed: see
+ * `src/components/ContactForm.astro` and `functions/api/contact.ts`.
+ *
+ * Facts the owner has not supplied — the email address, the booking URL —
+ * render as marked placeholders rather than as plausible-looking inventions. A
+ * site-wide test asserts that, so neither can ship as a bare blank.
+ */
+import ContactForm from '../components/ContactForm.astro';
+import Fact from '../components/Fact.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { type Fact as LegalFact, isUnknown, operator } from '../lib/legal';
+
+/**
+ * Widened from the literal type so that `isUnknown` narrows usefully: the page
+ * renders a link when the fact is there and a marked placeholder when it is
+ * not, and both branches have to type-check.
+ */
+const email: LegalFact = operator.email;
+const booking: LegalFact = operator.bookingUrl;
+---
+
+<BaseLayout
+  title="Contact — Dr. Wei-Hung Pan"
+  description="Send a message about Engineering or Analysis for your study, write to me directly, or book a short call. Expected reply within three working days."
+>
+  <h1>Contact</h1>
+
+  <p>
+    Tell me what you are working on and where the data is stuck. A paragraph is enough, and a rough
+    description is more useful to me than a tidy one — I would rather read the real problem than a
+    summary of it.
+  </p>
+
+  <h2>Send a message</h2>
+
+  <ContactForm locale="en" />
+
+  <h2>How soon you will hear back</h2>
+
+  <p>
+    I answer within three working days. A teaching week can stretch that to about a week, and I
+    would rather say so than let you wonder. If a week passes with no reply, the message went
+    astray rather than being ignored: send it again, or write to the address below.
+  </p>
+
+  <h2>Write to me directly</h2>
+
+  <p>
+    If you would rather not type into a web form — plenty of people in clinical research would not —
+    write to {isUnknown(email) ? <Fact value={email} /> : <a href={`mailto:${email}`}>{email}</a>}.
+    It reaches the same mailbox and gets the same reply. Nothing on this site requires you to submit
+    a form in order to make contact.
+  </p>
+
+  <h2>Book a short call instead</h2>
+
+  <p>
+    Twenty minutes on a call usually settles more than three emails. {
+      isUnknown(booking) ? (
+        <Fact value={booking} />
+      ) : (
+        <a href={booking}>Pick a time that suits you</a>
+      )
+    }. Nothing reaches the scheduling service until you follow that link, and the <a
+      href="/privacy/">privacy notice</a
+    > says what happens once you do.
+  </p>
+</BaseLayout>
