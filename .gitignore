@@ -1,6 +1,8 @@
 .DS_Store
 node_modules/
 dist/
+# Throwaway builds made by tests/teaching.test.ts to prove the build gates.
+dist-variant-*/
 .astro/
 .env
 .env.*

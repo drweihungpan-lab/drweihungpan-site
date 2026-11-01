@@ -36,11 +36,11 @@ describe('the Chinese font', () => {
    */
   it('carries a glyph for every Chinese character the built pages render', () => {
     const font = openSingleFont(join(DIST, SUBSET));
-    const chinese = allRoutes().filter((route) => route === '/zh/' || route.startsWith('/zh/'));
+    const chinesePages = allRoutes().filter((route) => route.startsWith('/zh/') || route === '/zh/');
 
-    expect(chinese.length).toBeGreaterThan(0);
+    expect(chinesePages.length).toBeGreaterThan(0);
 
-    const rendered = chinese.map((route) => page(route)('body').text()).join('');
+    const rendered = chinesePages.map((route) => page(route)('body').text()).join('');
     const han = [...new Set(rendered.match(/\p{Script=Han}/gu) ?? [])];
 
     expect(han.length).toBeGreaterThan(0);

@@ -1,0 +1,128 @@
+---
+/**
+ * Engineering — the first half of the lead offer (ADR-0001).
+ *
+ * Written for a Researcher who owns a study and cannot analyse it because the
+ * data layer underneath it does not exist yet. It names the four deliverables
+ * ADR-0001 fixes, each as its own section, so the problem can be recognised by
+ * scanning on a phone.
+ *
+ * No authorship question arises here — nobody is credited as the author of a
+ * data pipeline — so the credit policy lives on the Analysis page alone
+ * (ADR-0002). Nothing on this page may touch the faith stream or name the
+ * owner's employer; `tests/services.test.ts` asserts both.
+ */
+import ContactCallToAction from '../../components/ContactCallToAction.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Engineering for clinical research — Dr. Wei-Hung Pan"
+  description="Clinical data pipelines, reproducible analysis setups, apps and registry databases for clinical research groups. Fixed-scope packages, quoted per project."
+>
+  <h1>Your data is not ready for the analysis you need</h1>
+
+  <p>
+    The numbers exist. They are in four exports from the hospital system, two spreadsheets a
+    research assistant maintained before they left, and a folder nobody has opened since the last
+    grant report. Every analysis starts by rebuilding the dataset by hand, every rebuild comes out
+    slightly different, and nobody can say which version produced the figure in the manuscript.
+  </p>
+
+  <p>
+    That is an engineering problem, and it is the one I solve. I have worked with health and
+    clinical data since 2012, and I build the data layer a study runs on — then run the statistics
+    on it. A group can find a statistician in a university department and a developer on a
+    freelance marketplace; one person who will build the data layer <em>and</em> defend the methods
+    that come out of it is harder to find.
+  </p>
+
+  <h2>A clinical data pipeline</h2>
+
+  <p>
+    One documented path from the source export to an analysis-ready dataset: parsing, unit and
+    code-system harmonisation, deduplication, derived variables, and validation rules that fail
+    loudly instead of quietly dropping rows. It is a program, not an afternoon of cleaning, so the
+    next extract takes minutes rather than another month.
+  </p>
+
+  <h2>A reproducible analysis setup</h2>
+
+  <p>
+    A pinned environment, version control, tests over the derived variables, and continuous
+    integration that re-runs the whole thing on every change. A result a reviewer asks about two
+    years from now can be regenerated from the raw export by a colleague who has never met you —
+    which is increasingly what journals and funders mean when they ask for analysis code.
+  </p>
+
+  <h2>An app or dashboard</h2>
+
+  <p>
+    A small, purpose-built interface where a paper form and a spreadsheet are currently losing you
+    data: structured entry with validation at the point of capture, screening and eligibility
+    checks, and recruitment and completeness monitoring your coordinators can read without asking
+    you first.
+  </p>
+
+  <h2>A registry or cohort database</h2>
+
+  <p>
+    A real schema instead of a widening spreadsheet: declared variables and permitted values,
+    integrity across visits and across patients, access by role, an audit trail of who changed
+    what, and an export that arrives in your analysis as a dataset rather than as another cleaning
+    job. Built to outlive the person who set it up and the grant that paid for it.
+  </p>
+
+  <h2>How it is bought</h2>
+
+  <p>
+    Every engagement is a <strong>fixed-scope</strong> package, never an hourly rate.
+    What you provide, what you receive and when it is finished are written down before
+    any work starts. Billing by the hour against a messy dataset turns reliably into
+    unbounded requests, which is bad for your budget and worse for your timeline.
+  </p>
+
+  <p>
+    There are <strong>no published prices</strong>, because an honest one depends on
+    how many sources feed the dataset, what state they are in, and what has to keep
+    running after I hand it over. Tell me what you have and you get a written scope and
+    a quote for the package — itemised for a grant office if your funding needs that.
+  </p>
+
+  <p>
+    I work inside your institution's own infrastructure and governance. Identifiable
+    patient data stays there: it does not come onto my machines, and a de-identified
+    extract or a synthetic sample is enough to build against.
+  </p>
+
+  <h2>What I do not do</h2>
+
+  <ul>
+    <li>
+      <strong>Regulatory submission work.</strong> No submission-grade datasets or
+      documentation feeding a filing to a regulator, and no system validation under
+      that scope.
+    </li>
+    <li>
+      <strong>Hospital IT.</strong> No server or network administration, no electronic
+      health record configuration, no vendor platform procurement, no support rota.
+    </li>
+    <li>
+      <strong>Hourly staff augmentation.</strong> I am not a pair of hands to be booked
+      by the day against a backlog somebody else prioritises.
+    </li>
+    <li>
+      <strong>A system with nobody to hand it to.</strong> Every build ends in a
+      handover to a named colleague of yours, with documentation they can work from. If
+      there is no such person yet, say so at the start and we will scope that in rather
+      than discover it at the end.
+    </li>
+  </ul>
+
+  <ContactCallToAction
+    locale="en"
+    heading="Tell me what your data looks like"
+    body="Send the study, the sources it comes from and the deadline you are working to. You get a written scope and a fixed price for the package — or an honest note that this is not work for me."
+    action="Request a quote"
+  />
+</BaseLayout>

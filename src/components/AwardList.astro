@@ -1,0 +1,31 @@
+---
+/**
+ * Awards, rendered from the one award record.
+ *
+ * The award's name, the body that gave it and the year are proper nouns and a
+ * date, identical in both languages; only the line explaining what it was for
+ * is written in the language of the page.
+ */
+import { type Locale } from '../lib/i18n';
+import { awardRecord } from '../lib/records';
+
+interface Props {
+  /** The language this page is written in. */
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const awards = await awardRecord();
+---
+
+<ul class="space-y-4">
+  {
+    awards.map((award) => (
+      <li>
+        <p class="font-semibold">{award.year} — {award.title}</p>
+        <p>{award.awarder}</p>
+        <p>{award.detail[locale]}</p>
+      </li>
+    ))
+  }
+</ul>

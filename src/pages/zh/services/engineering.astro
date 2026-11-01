@@ -1,0 +1,102 @@
+---
+/**
+ * Engineering, in Traditional Chinese.
+ *
+ * Written natively, not translated. A Taiwanese Researcher's situation is not
+ * the English page's situation rearranged: the data comes out of a hospital
+ * HIS or the national claims database, the deadline is a grant close-out, and
+ * the money is spent through a quotation that has to survive an audit. The
+ * page therefore says those things in their own terms rather than mirroring
+ * the English sentences.
+ *
+ * Adding Chinese copy here changes the font subset: run `npm run font:subset`
+ * and commit the regenerated woff2, or `tests/fonts.test.ts` fails.
+ */
+import ContactCallToAction from '../../../components/ContactCallToAction.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="臨床研究的資料工程 — 潘威宏博士"
+  description="為臨床研究團隊建立資料流程、可重現的分析環境、收案介面與登錄資料庫。固定範圍的方案，依案報價。"
+>
+  <h1>資料還不能分析，而計畫結案的時間已經在倒數</h1>
+
+  <p>
+    數字其實都在：醫院系統匯出的四份報表、研究助理離職前維護的兩個 Excel
+    檔，還有一疊從上次計畫結案之後就沒人打開的資料夾。每次要分析，就得重新手工整理一次；每次整理出來的結果都有一點不一樣，而論文裡那張圖究竟是用哪一版資料跑出來的，已經沒有人說得清楚。
+  </p>
+
+  <p>
+    這不是統計問題，是工程問題，也正是我處理的事。我自 2012 年起處理健康與臨床資料，先把研究要跑的資料層建起來，再在上面做統計分析。不論資料來自院內的
+    HIS、自建的收案表單，還是健保資料庫的申報檔，處理的邏輯是一樣的。研究團隊要找統計人員，大學裡找得到；要找工程人員，外面也找得到；難找的是同一個人既能把資料層建起來，也能替跑出來的方法辯護。
+  </p>
+
+  <h2>臨床資料流程</h2>
+
+  <p>
+    從原始匯出到可以直接分析的資料集，只留一條寫下來的路徑：解析、單位與編碼系統的統一、重複紀錄的處理、衍生變項的計算，以及會明確報錯、而不是默默把資料列丟掉的檢核規則。它是一支程式，不是一個下午的手工整理；下一批資料進來時，重跑是幾分鐘的事，不是再花一個月。
+  </p>
+
+  <h2>可重現的分析環境</h2>
+
+  <p>
+    鎖定版本的套件環境、版本控制、針對衍生變項的測試，以及每次修改都會自動重跑一次的持續整合。兩年後審稿人問起某個數字，可以從原始匯出重新產生一次，而且是由一位沒見過你的同事來跑。期刊與計畫單位要求附上分析程式碼時，真正要的就是這件事。
+  </p>
+
+  <h2>收案或監測用的應用程式與介面</h2>
+
+  <p>
+    在紙本表單和 Excel
+    正在讓你漏掉資料的地方，做一個小而專用的介面：輸入當下就檢核、篩選與納入條件自動判斷、收案進度與資料完整度隨時看得到。研究助理不必每件事都回來問你，你也不必等到月底才發現有一組資料從頭到尾都沒收進來。
+  </p>
+
+  <h2>登錄資料庫與世代資料庫</h2>
+
+  <p>
+    用真正的資料結構取代那個一直往右長的
+    Excel：定義清楚的變項與允許值、跨次訪視與跨個案的一致性、依角色開放的權限、誰在什麼時候改了什麼的紀錄，以及匯出後可以直接分析、不必再清一遍的資料集。它要能活得比當初建它的人更久，也要能活過付錢的那個計畫。
+  </p>
+
+  <h2>怎麼計費</h2>
+
+  <p>
+    每一個案子都是<strong>固定範圍</strong>的方案，不按時計費。你提供什麼、你拿到什麼、什麼時候算完成，開工之前就寫下來。面對一份混亂的資料按時計費，最後幾乎一定會變成沒有上限的需求，對你的經費不利，對你的時程更不利。
+  </p>
+
+  <p>
+    這裡<strong>不公開價格</strong>，因為誠實的價格取決於有幾個資料來源、它們現在是什麼狀態，以及交付之後還要繼續跑什麼。你先告訴我手上有什麼，我回一份把範圍寫清楚的報價；需要用計畫經費核銷的話，報價單會按核銷需要的項目開立。
+  </p>
+
+  <p>
+    我在你機構自己的環境與治理規範裡工作。可識別的病人資料留在原處，不會進到我的機器；開發階段用去識別化的樣本或模擬資料就足夠。
+  </p>
+
+  <h2>我不做的事</h2>
+
+  <ul>
+    <li>
+      <strong>法規送審的工作。</strong
+      >不製作要提交給法規單位的送審級資料集與文件，也不承接該範圍下的系統驗證。
+    </li>
+    <li>
+      <strong>醫院資訊室的工作。</strong
+      >不做伺服器與網路管理、不設定電子病歷系統、不代為採購廠商平台、不排值班支援。
+    </li>
+    <li>
+      <strong>按時計費的人力支援。</strong
+      >我不是按天計價、照別人排好的待辦清單動手的一雙手。
+    </li>
+    <li>
+      <strong>交不出去的系統。</strong
+      >每一次交付都要交到你這邊一位指名的同事手上，連同一份他能照著做的文件。如果現在還沒有這樣的人，請一開始就說，我們把這件事放進範圍，而不是到最後才發現。
+    </li>
+  </ul>
+
+  <ContactCallToAction
+    locale="zh"
+    heading="先告訴我你的資料長什麼樣"
+    body="把研究內容、資料來自哪些來源、以及你的期限寄給我。你會收到一份寫下來的範圍和一個固定價格；如果這件事不該由我做，我也會直接說。"
+    action="索取報價"
+  />
+</BaseLayout>

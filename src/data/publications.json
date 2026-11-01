@@ -1,0 +1,22 @@
+[
+  {
+    "id": "genome-medicine-2018",
+    "title": { "unknown": "article title, authors and DOI for the 2018 Genome Medicine paper" },
+    "journal": "Genome Medicine",
+    "year": 2018
+  },
+  {
+    "id": "gastroenterology-2019",
+    "title": { "unknown": "article title, authors and DOI for the 2019 Gastroenterology paper" },
+    "journal": "Gastroenterology",
+    "year": 2019
+  },
+  {
+    "id": "cmgh-2020",
+    "title": {
+      "unknown": "article title, authors and DOI for the 2020 Cellular and Molecular Gastroenterology and Hepatology paper"
+    },
+    "journal": "Cellular and Molecular Gastroenterology and Hepatology",
+    "year": 2020
+  }
+]
