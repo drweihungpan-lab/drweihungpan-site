@@ -80,6 +80,57 @@ edit that both pages pick up. A new processor anywhere on the site needs a row
 in the privacy notice's processor table stating its legal basis, or the suite
 fails.
 
+## The writing section
+
+Professional writing stays on the platform that already publishes it and
+`/writing/` links out to it. Faith writing is hosted here as markdown, under
+`/writing/faith/`. The split is a necessity rather than tidiness: that platform
+has one profile and one feed, so a faith piece published there would land in
+front of every Client who followed the professional writing, which is exactly
+the separation of professional and faith content the design built. No service
+page may link into the faith stream or carry its content, and the suite asserts
+that over every service page the build emits.
+
+**Publishing a faith entry is one markdown file.** Add it to
+`src/content/writing/` with this frontmatter and write the piece:
+
+| Field | |
+| --- | --- |
+| `title` | The heading, the browser-tab title and the link text. |
+| `description` | One sentence, for search results and the stream index. |
+| `date` | Publication date. Orders the stream and is printed on the entry. |
+| `lang` | `'en'` or `'zh'`. |
+| `stream` | `'faith'` — the only stream hosted on this site. |
+| `translationOf` | Optional: the `id` of the counterpart entry in the other language. |
+| `draft` | Optional, defaults to `false`. |
+
+**No page is edited and nothing is registered.** The file becomes a page at
+`/writing/faith/<file-name>/`, a line on the stream index and on the writing
+index, and — if it is the first one — the **Faith** item in the main
+navigation. The schema is strict, so a missing field, an unparseable date or a
+misspelled key **fails the build** rather than reaching a reader as a blank
+title. A `draft: true` entry is never published or linked. The faith stream is
+English-only, by the spec's five-page limit on Traditional Chinese, so a
+`lang: 'zh'` entry waits for a Chinese stream instead of shipping Chinese prose
+on a page that declares itself English.
+
+**The faith navigation item exists only while an entry is published**, so the
+site never shows an empty section. There is no special case for it anywhere:
+`src/lib/writing.ts` derives the faith routes from the collection, and
+`src/lib/i18n.ts` folds them into the same route set the navigation already
+filters against. Both branches are asserted against built HTML — the published
+one in the suite's own build, the empty one in
+`tests/writing-publishing.test.ts`, which builds the site again with
+`WRITING_CONTENT_DIR` pointing at a temporary directory of entries.
+
+Two things here are waiting for the owner. `src/content/writing/sample-entry.md`
+is **sample content**: replacing or deleting it is the first real entry.
+`professionalWriting` in `src/lib/writing.ts` is **empty**, because his Medium
+profile and the titles and URLs of his pieces are not in this repository and
+were not invented — the index says what it is waiting for, through the same
+marked-placeholder convention as the legal pages. Listing a piece is one object
+in that array; no page is edited for that either.
+
 ## How this site is tested
 
 **One seam: the built output.** The suite builds the site once and asserts

@@ -7,4 +7,6 @@
 //
 // Every collection declares a Zod schema, so a malformed entry fails the
 // build instead of rendering wrongly. See the spec's "Content model".
-export const collections = {};
+import { writing } from './collections/writing';
+
+export const collections = { writing };
