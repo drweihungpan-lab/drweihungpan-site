@@ -10,5 +10,6 @@
 import { awards } from './collections/awards';
 import { career } from './collections/career';
 import { publications } from './collections/publications';
+import { teaching } from './collections/teaching';
 
-export const collections = { awards, career, publications };
+export const collections = { awards, career, publications, teaching };
