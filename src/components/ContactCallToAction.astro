@@ -1,0 +1,60 @@
+---
+/**
+ * The one action an offer page asks for: get in touch about a quote.
+ *
+ * Every offer page gets exactly one of these and nothing else to click, so a
+ * Researcher who recognises their problem has a single obvious next move.
+ * Later offer pages — Workshops, consulting — should use this component rather
+ * than hand-rolling a closing block, so that the CTA cannot drift in wording,
+ * in shape, or in how it handles a missing contact page.
+ *
+ * **Why the link is conditional.** `/contact/` is built by its own ticket. A
+ * page must never link to a page that was not built — the build would ship a
+ * dangling internal link, which the spec makes a merge-blocking failure — so
+ * this follows the same if-and-only-if rule as the language switcher: the
+ * action renders as a link when the contact page exists, and as plain emphatic
+ * text when it does not. The day contact is built, every page carrying this
+ * component gains the link with no edit. `tests/services.test.ts` asserts both
+ * branches, so the rule survives that ticket landing.
+ *
+ * It is a labelled `section`, which makes it a region a screen-reader user can
+ * jump to, and gives the suite a semantic handle on "the call to action"
+ * instead of a utility class.
+ */
+import { type Locale, href, routeExists } from '../lib/i18n';
+
+interface Props {
+  /** The language the surrounding page is written in. */
+  locale: Locale;
+  /** The heading: what the visitor is being invited to do. */
+  heading: string;
+  /** One sentence on what they send and what they get back. */
+  body: string;
+  /** The action itself, e.g. "Request a quote". Becomes the link text. */
+  action: string;
+}
+
+const { locale, heading, body, action } = Astro.props;
+
+const contact = href(locale, 'contact');
+const headingId = 'call-to-action';
+---
+
+<section
+  aria-labelledby={headingId}
+  class="mt-10 rounded-lg border border-border bg-surface px-5 py-4"
+>
+  <h2 id={headingId} class="mt-0">{heading}</h2>
+  <p>{body}</p>
+  <p>
+    {
+      routeExists(contact) ? (
+        <a href={contact} class="font-semibold">
+          {action}
+        </a>
+      ) : (
+        <strong>{action}</strong>
+      )
+    }
+  </p>
+</section>

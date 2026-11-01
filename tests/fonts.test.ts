@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import * as fontkit from 'fontkit';
 import { describe, expect, it } from 'vitest';
-import { DIST, assetBytes, assetExists, page, styles } from './site';
+import { DIST, allRoutes, assetBytes, assetExists, page, styles } from './site';
 
 const SUBSET = 'fonts/noto-sans-tc-400-subset.woff2';
 
@@ -30,7 +30,11 @@ describe('the Chinese font', () => {
 
   it('carries a glyph for every Chinese character the built pages render', () => {
     const font = openSingleFont(join(DIST, SUBSET));
-    const rendered = page('/zh/')('body').text();
+    const chinesePages = allRoutes().filter((route) => route.startsWith('/zh/') || route === '/zh/');
+
+    expect(chinesePages.length).toBeGreaterThan(0);
+
+    const rendered = chinesePages.map((route) => page(route)('body').text()).join('');
     const han = [...new Set(rendered.match(/\p{Script=Han}/gu) ?? [])];
 
     expect(han.length).toBeGreaterThan(0);
