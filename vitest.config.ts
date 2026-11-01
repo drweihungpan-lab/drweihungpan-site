@@ -6,16 +6,21 @@ export default defineConfig({
     globalSetup: ['./tests/global-setup.ts'],
     include: ['tests/**/*.test.ts'],
 
-    // Test files run one at a time, deliberately.
-    //
-    // The build-gate tests — the ones proving a malformed entry fails the
-    // build, and that adding a session moves the derived Workshop count —
-    // edit a file under `src/data/` and run a real `astro build`, then put
-    // the file back. Two of those running at once see each other's edits and
-    // share Astro's content store, so one fails for the other's reason.
-    //
-    // The whole suite reads one build that `globalSetup` already made, so
-    // serialising costs a few seconds and buys tests that mean what they say.
+    /*
+     * Test files run one at a time.
+     *
+     * Most of this suite only reads `dist/`, and would be happy in parallel.
+     * A few files have to build the site again, because a rule has branches
+     * one build cannot show at once — an empty faith stream, a malformed
+     * entry, a different teaching record. Those builds share one project
+     * root, so they share `.astro/`'s content store and the Vite cache, and
+     * two of them also rewrite a data file in the working tree while they
+     * run. Overlapping, they read each other's content and fail in ways that
+     * have nothing to do with what they assert.
+     *
+     * The honest fix is to stop them overlapping. Reading `dist/` is cheap
+     * enough that serialising the rest costs almost nothing.
+     */
     fileParallelism: false,
   },
 });

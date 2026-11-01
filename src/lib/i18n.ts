@@ -6,6 +6,7 @@
  * a page that is not there.
  */
 import { getRelativeLocaleUrl } from 'astro:i18n';
+import { faithStreamRoutes } from './writing';
 
 export const locales = ['en', 'zh'] as const;
 export type Locale = (typeof locales)[number];
@@ -53,15 +54,24 @@ export function href(locale: Locale, path = ''): string {
  */
 const pageFiles = Object.keys(import.meta.glob('/src/pages/**/*.astro'));
 
-export const routes: ReadonlySet<string> = new Set(
-  pageFiles.map(
+/**
+ * A page file answers for a static page, because the file and the route are
+ * the same thing. A collection-backed route is not: the faith stream's page
+ * file is always there and its route is built only while a faith entry is
+ * published. Such a route has to say so, derived from the collection — which
+ * is what makes the faith navigation item appear only when there is something
+ * behind it. See `src/lib/writing.ts`.
+ */
+export const routes: ReadonlySet<string> = new Set([
+  ...pageFiles.map(
     (file) =>
       `${file.replace('/src/pages', '').replace(/\.astro$/, '').replace(/\/index$/, '')}/`.replace(
         /^\/?/,
         '/',
       ),
   ),
-);
+  ...faithStreamRoutes,
+]);
 
 /** Normalises a pathname to the trailing-slash form the route set uses. */
 function normalise(pathname: string): string {
