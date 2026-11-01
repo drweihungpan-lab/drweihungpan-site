@@ -1,0 +1,262 @@
+---
+/**
+ * Workshops — the smaller third offer (ADR-0001).
+ *
+ * Written for a team lead with a training budget, who is a different buyer
+ * from the Researcher the two lead offer pages address: they are not trying to
+ * rescue a study, they are trying to work out whether this material fits their
+ * team and whether booking it is feasible at all. The page is therefore
+ * arranged so that every question they would otherwise have to ask in a sales
+ * call is answered in the copy — audience, duration, format and outcomes per
+ * Workshop, then the real syllabus, then delivery.
+ *
+ * **Why the Course material is summarised here.** `GLOSSARY.md` keeps the two
+ * words apart: a **Course** is the public material, free to read, and a
+ * **Workshop** is the paid group delivery derived from one. The spec removed
+ * the two separate Course pages because a Course sells nothing on its own; its
+ * syllabus belongs on the page that is selling the Workshop it feeds, where a
+ * buyer can read the real exercises before contacting anyone.
+ *
+ * **Why the repository links come from the teaching record.** They are read
+ * through `sessionsOfKind('course')` rather than written here, so the URL a
+ * buyer clicks on this page and the URL on `/teaching/` are the same string
+ * from the same file. A hardcoded copy would survive a repository being
+ * renamed and would send a buyer to a 404 — the one click this page exists to
+ * earn.
+ *
+ * Nothing here may touch the faith stream or name the owner's employer;
+ * `tests/services.test.ts` asserts both over every service page.
+ */
+import ContactCallToAction from '../../components/ContactCallToAction.astro';
+import Fact from '../../components/Fact.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { href } from '../../lib/i18n';
+import { type TeachingSession, sessionsOfKind } from '../../lib/teaching';
+
+/**
+ * What a team lead is buying, as opposed to what the teaching record
+ * evidences.
+ *
+ * The record holds delivery history — the Workshop's title, the material it
+ * comes from, who it was delivered to. The four facts below are the offer,
+ * which is this page's to state: who in a team it suits, how long it takes,
+ * how it runs in the room, and what the team can do afterwards. `duration`
+ * names the teaching time in the Course's own words, and
+ * `tests/workshops.test.ts` asserts that the same phrase still appears in that
+ * Course's format line in the record, so the length sold cannot drift from the
+ * length of the material actually taught.
+ */
+interface WorkshopOffer {
+  /** The entry's id in `src/data/teaching.yaml`. */
+  id: string;
+  audience: string;
+  /** Teaching time, naming the hours in the Course's own words. */
+  duration: string;
+  format: string;
+  outcomes: string[];
+}
+
+const offers: WorkshopOffer[] = [
+  {
+    id: 'workshop-reproducible-pipelines',
+    audience:
+      'A data or analysis team of up to about twenty people who already work in Python and are comfortable with basic regression, and who are losing time to environments that differ between machines, analyses nobody can re-run, and code that lives inside one person’s notebook.',
+    duration:
+      '14 hours of teaching in all, run as sessions of up to three hours — consecutive days, or a weekly session over several weeks, whichever your team can actually protect.',
+    format:
+      'Hands-on at your team’s own machines, in sessions of up to three hours. One running example carries the whole Workshop: a messy notebook becomes an installable, tested, containerised application, with your team doing the work rather than watching me do it.',
+    outcomes: [
+      'Work in an isolated, pinned environment, so that an analysis behaves the same on a colleague’s machine as on their own.',
+      'Collaborate in Git without overwriting each other: branches, review, and a history that explains itself.',
+      'Turn the code they repeat into an installable package with tests, instead of copying a notebook cell between projects.',
+      'Let continuous integration re-run those tests on every change, so that a break is found by a machine rather than by a reviewer.',
+      'Put an analysis behind an API and inside a container, so that a result can be handed to somebody who does not share their setup.',
+    ],
+  },
+  {
+    id: 'workshop-clinical-development',
+    audience:
+      'A data team moving into clinical work — data scientists, engineers and analysts who are capable with data and new to trials. Nothing is programmed in this one, so product, regulatory and project colleagues can sit in it usefully.',
+    duration:
+      'six hours of teaching in all, run as three sessions of two hours, on separate days or inside a single day.',
+    format:
+      'Three sessions of two hours, discussion-led and worked through real study situations rather than slides read aloud. Nothing in it depends on a machine being set up, so it loses nothing delivered remotely.',
+    outcomes: [
+      'Follow how a development question becomes a clinical study, and say what a protocol, an endpoint and a phase commit a sponsor to.',
+      'Name the professional roles around clinical data, and know which of them to ask about what.',
+      'Judge where machine learning and AI genuinely help with clinical data, and where a claim about them will not survive scrutiny.',
+      'See what changes when a product measures rather than treats, and what the EU data context then asks of the team.',
+      'Discuss a study with clinical colleagues in their own vocabulary, instead of translating every sentence through a project manager.',
+    ],
+  },
+];
+
+/**
+ * Each offer joined to its entry in the teaching record, and to the Course it
+ * is derived from.
+ *
+ * The join is deliberately strict: a Workshop whose id is no longer in the
+ * record, or whose Course repository is no longer linked from one, fails the
+ * build rather than quietly rendering a Workshop with no material behind it.
+ * That is the owner's rule that a mistake never reaches a visitor, applied to
+ * the one page where the material *is* the sales argument.
+ */
+function must<T>(value: T | undefined, missing: string): T {
+  if (value === undefined) throw new Error(`${missing} — see src/data/teaching.yaml`);
+  return value;
+}
+
+const record = await sessionsOfKind('workshop');
+const courses = await sessionsOfKind('course');
+
+interface Offered extends WorkshopOffer {
+  session: TeachingSession;
+  course: TeachingSession;
+}
+
+const workshops: Offered[] = offers.map((offer) => {
+  const session = must(
+    record.find((entry) => entry.id === offer.id),
+    `No Workshop "${offer.id}" in the teaching record`,
+  );
+  const repository = must(session.repository, `The Workshop "${offer.id}" has no repository`);
+  const course = must(
+    courses.find((entry) => entry.repository === repository),
+    `No Course in the record is taught from ${repository}`,
+  );
+
+  return { ...offer, session, course };
+});
+
+/** A Workshop's heading id, so that each offer is its own labelled region. */
+const regionId = (offer: Offered): string => `workshop-${offer.id}`;
+
+/** A sentence fragment that continues one, e.g. "to 20 statistics students". */
+const continuing = (text: string): string => text.charAt(0).toLowerCase() + text.slice(1);
+---
+
+<BaseLayout
+  title="Workshops for data and clinical teams — Dr. Wei-Hung Pan"
+  description="Two Workshops for teams: reproducible analysis pipelines, and clinical development for data scientists. The Course material is public, so a buyer can read the real syllabus first."
+>
+  <h1>Read the material before you book the Workshop</h1>
+
+  <p>
+    Both Workshops below are delivered from material I teach as university Courses, and that
+    material is public. You can open the repository, read the syllabus, look at the exercises your
+    team would work through, and decide whether it is any good — before you spend a meeting on a
+    sales call or a budget line on a trial run.
+  </p>
+
+  <p>
+    I have worked with health and clinical data since 2012, and I teach statistics, machine
+    learning and AI to research teams and university students in Taiwan and Germany. Each Workshop
+    below states who it is for, how long it takes, how it runs in the room, and what your team can
+    do afterwards that it could not do before.
+  </p>
+
+  {
+    workshops.map((offer) => (
+      <section aria-labelledby={regionId(offer)}>
+        <h2 id={regionId(offer)}>
+          <Fact value={offer.session.title} />
+        </h2>
+
+        {offer.session.note && <p>{offer.session.note}</p>}
+
+        <dl>
+          <dt>Audience</dt>
+          <dd>{offer.audience}</dd>
+
+          <dt>Duration</dt>
+          <dd>{offer.duration}</dd>
+
+          <dt>Format</dt>
+          <dd>{offer.format}</dd>
+        </dl>
+
+        <h3>What your team can do afterwards</h3>
+
+        <ul>
+          {offer.outcomes.map((outcome) => (
+            <li>{outcome}</li>
+          ))}
+        </ul>
+
+        <h3>The Course it is taught from</h3>
+
+        <p>
+          Taught as{' '}
+          <strong>
+            <Fact value={offer.course.title} />
+          </strong>{' '}
+          at <Fact value={offer.course.venue} />
+          {offer.course.audience && <>, to {continuing(offer.course.audience)}</>}.{' '}
+          {offer.course.format && <>{offer.course.format}.</>}
+        </p>
+
+        {offer.course.note && <p>{offer.course.note}</p>}
+
+        <p>
+          <a href={offer.course.repository}>Course repository</a>
+          {offer.course.slides && (
+            <>
+              {' · '}
+              <a href={offer.course.slides}>Slides</a>
+            </>
+          )}
+        </p>
+      </section>
+    ))
+  }
+
+  <h2>Delivery</h2>
+
+  <p>
+    <strong>On-site or remote.</strong> On-site is worth more for the hands-on Workshop, where a
+    room in which people can turn a screen towards me saves most of the first hour. Remote
+    delivery is offered for both, and the discussion-led Workshop loses nothing in a video call.
+  </p>
+
+  <p>
+    <strong>Taiwan or Germany.</strong> I teach in both countries, so either is routine rather
+    than an exception. Travel is quoted inside the package instead of appearing afterwards.
+  </p>
+
+  <p>
+    <strong>Mandarin or English.</strong> Either language, including the materials and the
+    exercises. Pick the one your team discusses its own work in, not the one it reads
+    documentation in.
+  </p>
+
+  <h2>How it is booked</h2>
+
+  <p>
+    A Workshop is a <strong>fixed-scope</strong> package: the sessions, the length, the language
+    and what your team leaves with are written down before anything is booked. There are
+    <strong>no published prices</strong>, because an honest one depends on the size of the team,
+    where it is delivered and how much of the material you want. Tell me the team and the dates
+    and you get a written scope and a quote, itemised for a training budget if yours needs that.
+  </p>
+
+  <p>
+    If you are building a training platform and want material developed for it, write to me — it
+    is not work I go looking for.
+  </p>
+
+  <h2>Where I have taught before</h2>
+
+  <p>
+    Every Course, Workshop and talk I have delivered is listed with its date and venue in my
+    <a href={href('en', 'teaching')}>teaching record</a>, including the university Courses both
+    Workshops above are derived from. It is there so that you can judge whether I can hold a room
+    without taking my word for it.
+  </p>
+
+  <ContactCallToAction
+    locale="en"
+    heading="Tell me about your team"
+    body="Send the team, roughly how many people, where you are, and which of the two Workshops looks right. You get a written scope and a fixed price — or an honest note that your team needs something I do not teach."
+    action="Request a quote"
+  />
+</BaseLayout>
