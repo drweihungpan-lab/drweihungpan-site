@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import type { CheerioAPI } from 'cheerio';
 import { describe, expect, it } from 'vitest';
 import { sentPath } from '../src/lib/contact';
-import { PLACEHOLDER_MARK, isUnknown, operator } from '../src/lib/legal';
+import { type Fact, PLACEHOLDER_MARK, isUnknown, operator, placeholderText } from '../src/lib/legal';
 import { page, routeExists } from './site';
 
 /**
@@ -83,43 +83,55 @@ function controls($: CheerioAPI): Selection[] {
   return Array.from({ length: found.length }, (_, index) => found.eq(index));
 }
 
-describe('the contact page', () => {
-  it('exists in English and in Traditional Chinese', () => {
-    expect(routeExists('/contact/')).toBe(true);
-    expect(routeExists('/zh/contact/')).toBe(true);
-  });
-});
-
 /**
- * A fact the owner has not supplied yet is published as a marked placeholder,
- * not guessed at, so "is the email address there" has three answers and not
- * two. A test that demanded a real address would fail for the right reason and
- * then tempt someone into inventing one; a test that accepted anything would
- * pass on an empty page. This distinguishes the three.
+ * Whether the page carries a fact it is required to carry — and, when the
+ * owner has not supplied it yet, whether it is honestly marked as missing.
+ *
+ * "Is the email address there" has three answers, not two. A test demanding a
+ * real address would fail for the right reason and then tempt someone into
+ * inventing one; a test accepting anything at all would pass on an empty page.
+ *
+ * `linkTo` says what the supplied fact has to look like on the page, so the
+ * answer cannot be satisfied by some unrelated link that happens to be nearby.
  */
-function present($: CheerioAPI, real: string, describes: RegExp): 'supplied' | 'placeholder' | 'missing' {
-  if ($(`main ${real}`).length > 0) return 'supplied';
+function present(
+  $: CheerioAPI,
+  fact: Fact,
+  linkTo: (value: string) => string,
+): 'supplied' | 'placeholder' | 'missing' {
+  if (!isUnknown(fact)) {
+    return $(`main ${linkTo(fact)}`).length > 0 ? 'supplied' : 'missing';
+  }
 
   const marked = $('main mark')
     .map((_, element) => $(element).text())
     .get()
-    .filter((text) => text.includes(PLACEHOLDER_MARK) && describes.test(text));
+    .filter((text) => text === placeholderText(fact));
 
   return marked.length > 0 ? 'placeholder' : 'missing';
 }
 
 describe('the contact page', () => {
+  it('exists in English and in Traditional Chinese', () => {
+    expect(routeExists('/contact/')).toBe(true);
+    expect(routeExists('/zh/contact/')).toBe(true);
+  });
+
   /**
    * The spec's three non-form essentials. This audience often distrusts web
    * forms, so an address they can write to themselves is not a nicety; and an
    * unstated response time is what makes silence read as rejection.
    */
   it.each(CONTACT_ROUTES)('%s offers an email address as well as the form', (route) => {
-    expect(present(page(route), 'a[href^="mailto:"]', /email/i)).not.toBe('missing');
+    expect(present(page(route), operator.email, (address) => `a[href="mailto:${address}"]`)).not.toBe(
+      'missing',
+    );
   });
 
   it.each(CONTACT_ROUTES)('%s offers a scheduling link', (route) => {
-    expect(present(page(route), 'a[href^="http"]', /booking|scheduling/i)).not.toBe('missing');
+    expect(present(page(route), operator.bookingUrl, (url) => `a[href="${url}"]`)).not.toBe(
+      'missing',
+    );
   });
 
   /**
@@ -148,7 +160,7 @@ describe('the contact page', () => {
 
     const handlers = $('*')
       .map((_, element) =>
-        Object.keys(($(element).attr() ?? {}) as Record<string, string>).filter((attribute) =>
+        Object.keys($(element).attr() ?? {}).filter((attribute) =>
           attribute.startsWith('on'),
         ),
       )
@@ -237,7 +249,9 @@ describe('the confirmation page', () => {
   it.each([sentPath('en'), sentPath('zh')])('%s says what happens next', (route) => {
     const $ = page(route);
 
-    expect(present($, 'a[href^="mailto:"]', /email/i)).not.toBe('missing');
+    expect(present($, operator.email, (address) => `a[href="mailto:${address}"]`)).not.toBe(
+      'missing',
+    );
     expect($(`main a[href$="contact/"]`).length).toBeGreaterThan(0);
   });
 });
