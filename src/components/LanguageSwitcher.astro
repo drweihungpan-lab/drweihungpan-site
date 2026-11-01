@@ -1,0 +1,49 @@
+---
+/**
+ * The visible way into the other language — when there is one.
+ *
+ * The rule the whole bilingual site rests on: a switcher renders **if and only
+ * if** a counterpart page was built. A visitor is therefore never offered a
+ * language only to land on a page that is not there, and the site can hold
+ * five Chinese pages beside a dozen English ones without a dead link.
+ *
+ * The component does not decide this. It is handed `counterpart`, which comes
+ * from `counterpart()` in `src/lib/i18n.ts` — the one place the rule lives —
+ * and renders nothing at all when it is `undefined`. A caller that passes
+ * nothing gets nothing, which is the safe default.
+ *
+ * The link is labelled in the language it leads to, because the visitor who
+ * needs it is the one who cannot read the current page. `hreflang` is both the
+ * correct announcement for a screen reader and the hook the built-output test
+ * selects on.
+ */
+import { type Locale, languageTag, otherLocale } from '../lib/i18n';
+import { chromeText } from '../lib/navigation';
+
+interface Props {
+  /** The language of the page this switcher sits on. */
+  locale: Locale;
+  /** The same page in the other language, or `undefined` when none was built. */
+  counterpart: string | undefined;
+}
+
+const { locale, counterpart } = Astro.props;
+
+const target = otherLocale(locale);
+const { languageNavLabel, switchTo } = chromeText[locale];
+---
+
+{
+  counterpart && (
+    <nav aria-label={languageNavLabel}>
+      <a
+        href={counterpart}
+        hreflang={languageTag(target)}
+        lang={languageTag(target)}
+        class="text-sm text-muted underline-offset-4 hover:text-fg"
+      >
+        {switchTo[target]}
+      </a>
+    </nav>
+  )
+}

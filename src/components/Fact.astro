@@ -1,0 +1,27 @@
+---
+/**
+ * One legal fact, or a visible admission that it is missing.
+ *
+ * A legal page with a silently blank line is worse than one that says what it
+ * is waiting for: the blank reads as an answer. An unfilled fact therefore
+ * renders inside `<mark>`, so a visitor and the owner both see it, and
+ * `tests/legal.test.ts` asserts that every placeholder on every built page is
+ * marked this way.
+ */
+import { type Fact, isUnknown, placeholderText } from '../lib/legal';
+
+interface Props {
+  /** The fact to show, from `src/lib/legal.ts`. */
+  value: Fact;
+}
+
+const { value } = Astro.props;
+---
+
+{
+  isUnknown(value) ? (
+    <mark class="bg-surface px-1 font-semibold text-fg">{placeholderText(value)}</mark>
+  ) : (
+    value
+  )
+}

@@ -87,6 +87,67 @@
     color: var(--color-brand);
   }
 
+  /*
+   * Reading rhythm for page content, scoped to `main` so the chrome's own
+   * lists and paragraphs keep the spacing their components give them. Each
+   * selector sits inside `:where()`, which contributes no specificity, so a
+   * utility class on an element still wins over the default.
+   */
+  main :where(h1) {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-block-end: 0.75rem;
+  }
+
+  main :where(h2) {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-block: 2rem 0.5rem;
+  }
+
+  main :where(h3) {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    margin-block: 1.5rem 0.5rem;
+  }
+
+  main :where(p, ul, ol) {
+    margin-block: 0.75rem;
+  }
+
+  main :where(ul, ol) {
+    padding-inline-start: 1.25rem;
+    list-style: revert;
+  }
+
+  /*
+   * Tabular legal data — the privacy notice's processor list. The table is
+   * wide by nature, so a page puts it in a scroll container rather than
+   * letting four columns of prose squeeze a phone or push the page sideways.
+   */
+  main :where(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  main :where(th, td) {
+    border: 1px solid var(--color-border);
+    padding: 0.5rem 0.625rem;
+    text-align: start;
+    vertical-align: top;
+  }
+
+  main :where(thead th) {
+    background-color: var(--color-surface);
+  }
+
+  /* A fact the owner has still to supply; see `src/components/Fact.astro`. */
+  main :where(mark) {
+    background-color: var(--color-surface);
+    color: var(--color-fg);
+  }
+
   /* A keyboard-only visitor must always be able to see where they are. */
   :focus-visible {
     outline: 2px solid var(--color-brand);

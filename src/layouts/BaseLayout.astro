@@ -5,9 +5,23 @@
  * It owns the four things that must be right on every page and are easy to get
  * wrong on one: the language attribute, the document head, the keyboard path
  * into the content, and whether a Chinese web font is loaded at all.
+ *
+ * The visible chrome is composed from `SiteHeader` and `SiteFooter`, which take
+ * no list of links: they derive the navigation and the legal links from the
+ * architecture in `src/lib/navigation.ts`, filtered to the routes the build
+ * emitted. A page therefore gets the header, the footer, the legal links and
+ * the language switcher by using this layout and nothing else — there is
+ * nothing for a new page to wire up and nothing in those components for it to
+ * change.
+ *
+ * `counterpart()` is resolved once here and handed to the header, so the head's
+ * `hreflang` link and the visible switcher can never disagree about whether the
+ * other language exists.
  */
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
 import { zhFont, zhFontFaceCss } from '../lib/fonts';
-import { chrome, counterpart, href, languageTag, otherLocale, resolveLocale } from '../lib/i18n';
+import { chrome, counterpart, languageTag, otherLocale, resolveLocale } from '../lib/i18n';
 import '../styles/global.css';
 
 interface Props {
@@ -66,20 +80,12 @@ const alternate = counterpart(Astro.url.pathname);
       >{skipToContent}</a
     >
 
-    <header class="border-b border-border">
-      <div class="mx-auto flex max-w-(--text-measure) px-4 py-4">
-        <a href={href(locale)} class="font-semibold text-fg no-underline">{siteName}</a>
-      </div>
-    </header>
+    <SiteHeader locale={locale} siteName={siteName} counterpart={alternate} />
 
     <main id="main" class="mx-auto max-w-(--text-measure) px-4 py-10">
       <slot />
     </main>
 
-    <footer class="border-t border-border">
-      <div class="mx-auto max-w-(--text-measure) px-4 py-6 text-sm text-muted">
-        <p>&copy; {new Date().getFullYear()} {siteName}</p>
-      </div>
-    </footer>
+    <SiteFooter locale={locale} siteName={siteName} />
   </body>
 </html>

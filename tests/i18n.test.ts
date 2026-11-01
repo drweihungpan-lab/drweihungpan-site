@@ -50,4 +50,31 @@ describe('every built page', () => {
       }
     },
   );
+
+  /**
+   * The same rule as the head link, but the half a visitor can see and click:
+   * a switcher appears on a page if and only if its counterpart was built, so
+   * nobody is offered a language that is not there. Both branches are live —
+   * the homepage has a counterpart; `/404`, `/impressum/` and `/privacy/` do
+   * not — and a page a later ticket adds is covered without editing this test.
+   */
+  it.each(allRoutes())(
+    '%s offers a visible language switcher if and only if that page was built',
+    (route) => {
+      const counterpart = counterpartOf(route);
+      const switcher = page(route)('header nav[aria-label] a[hreflang]');
+
+      if (!routeExists(counterpart)) {
+        expect(switcher).toHaveLength(0);
+        return;
+      }
+
+      expect(switcher).toHaveLength(1);
+      expect(switcher.attr('href')).toBe(counterpart);
+      expect(switcher.attr('hreflang')).toBe(languageOf(counterpart));
+
+      // Labelled in the language it leads to, so it reads to the visitor it is for.
+      expect(switcher.text().trim()).not.toBe('');
+    },
+  );
 });

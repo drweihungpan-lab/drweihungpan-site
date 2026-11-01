@@ -39,6 +39,47 @@ Requires Node 20.3 or newer. `npm install`, then:
 | `npm run check` | Type-checks the Astro and TypeScript sources. |
 | `npm run font:subset` | Regenerates the Chinese web font — see below. |
 
+## The site chrome
+
+Every page is built from `src/layouts/BaseLayout.astro`, which takes a `title`
+and a `description` and composes the rest. A new page needs nothing else: the
+header, the main navigation, the language switcher, the footer and the legal
+links all come with the layout.
+
+| Component | Props | What it does |
+| --- | --- | --- |
+| `layouts/BaseLayout.astro` | `title`, `description` | The whole page: language attribute, head, skip link, header, `main`, footer. |
+| `components/SiteHeader.astro` | `locale`, `siteName`, `counterpart` | Home link, main navigation, language switcher. |
+| `components/SiteFooter.astro` | `locale`, `siteName` | Copyright and the legal navigation. |
+| `components/LanguageSwitcher.astro` | `locale`, `counterpart` | Renders **only** when `counterpart` is defined. |
+| `components/Fact.astro` | `value` | A legal fact from `src/lib/legal.ts`, or a visibly marked placeholder. |
+
+**The navigation is not a list of links anyone maintains.** The information
+architecture is declared once in `src/lib/navigation.ts` and every item is
+filtered through `routeExists` before it renders. Adding `src/pages/about.astro`
+puts *About* in the English navigation; not adding `src/pages/zh/about.astro`
+keeps it out of the Chinese one. Nothing links a page that was not built, which
+is also why the Chinese navigation shows only the five pages Traditional Chinese
+is written for.
+
+**The language switcher renders if and only if a counterpart page exists**, from
+`counterpart()` in `src/lib/i18n.ts`. The layout resolves it once and hands it
+to the header, so the `hreflang` link in the head and the visible switcher
+cannot disagree. The homepage has a counterpart; `/404`, `/impressum/` and
+`/privacy/` do not, so both branches of the rule are live in the suite.
+
+**There is no cookie banner and there must never be one.** The analytics is
+cookie-free, which is what permits it. `tests/chrome.test.ts` asserts this over
+every page, so adding a cookie-setting script fails the suite.
+
+The two legal pages — `/impressum/` (§5 DDG, German, with an English rendering)
+and `/privacy/` (GDPR) — have no Traditional Chinese counterparts, by the spec.
+Facts the owner has still to supply live in `src/lib/legal.ts` as
+`unknown('...')` and render as marked placeholders; filling one in is a one-line
+edit that both pages pick up. A new processor anywhere on the site needs a row
+in the privacy notice's processor table stating its legal basis, or the suite
+fails.
+
 ## How this site is tested
 
 **One seam: the built output.** The suite builds the site once and asserts

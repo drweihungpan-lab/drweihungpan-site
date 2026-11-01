@@ -1,0 +1,257 @@
+---
+/**
+ * The GDPR privacy notice.
+ *
+ * It has to do four things the spec names explicitly: name every processor and
+ * the legal basis for each; cover the contact form, the email list and the
+ * analytics; disclose that testimonial consent records and photograph
+ * publication consents are held; and say plainly why there is no cookie
+ * banner. The processor table is the page's spine, so a processor cannot be
+ * added to the site without a row stating its legal basis.
+ *
+ * English only: the spec puts German beyond the Impressum and Traditional
+ * Chinese for this page out of scope. Facts the owner has not yet supplied
+ * render as visibly marked placeholders rather than as guesses.
+ */
+import Fact from '../components/Fact.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { legalLastReviewed, operator } from '../lib/legal';
+
+/**
+ * Every processor that touches a visitor's data, with the legal basis for the
+ * processing it performs. One row per purpose rather than per company, because
+ * the legal basis attaches to the purpose: Cloudflare hosts the site under a
+ * legitimate interest and measures it under a different one.
+ */
+const processors = [
+  {
+    name: 'Cloudflare, Inc. (San Francisco, California, USA)',
+    purpose:
+      'Hosts this site on Cloudflare Pages and delivers every page. Its servers process your IP address and request metadata in order to answer the request and to defend the site against attack.',
+    basis:
+      'Art. 6(1)(f) GDPR — my legitimate interest in delivering this site and keeping it available and secure.',
+    transfer:
+      'Processing takes place in the United States as well as the EU, on the EU–U.S. Data Privacy Framework where the provider is certified under it and otherwise on Standard Contractual Clauses under Art. 46(2)(c) GDPR.',
+  },
+  {
+    name: 'Cloudflare, Inc. — Cloudflare Web Analytics',
+    purpose:
+      'Counts page views so that I know which pages are read. It is cookie-free: it sets no cookie, builds no device fingerprint, follows nobody between sites and stores no profile. What I see is aggregate counts.',
+    basis:
+      'Art. 6(1)(f) GDPR — my legitimate interest in knowing which pages are read, weighed against an interference that is minimal because no identifier is stored on your device and no profile is built.',
+    transfer: 'As for hosting, above.',
+  },
+  {
+    name: 'A serverless function on Cloudflare Pages',
+    purpose:
+      'Receives what you type into the contact form and hands it on for delivery. The form is not a third-party embed, so submitting it introduces no further processor and no cookie.',
+    basis:
+      'Art. 6(1)(b) GDPR where your message concerns an engagement you are asking me to quote for, and otherwise Art. 6(1)(f) GDPR — my legitimate interest in answering an enquiry addressed to me.',
+    transfer: 'As for hosting, above.',
+  },
+  {
+    name: 'Transactional email provider: ',
+    nameFact: operator.transactionalEmailProvider,
+    purpose:
+      'Carries a contact-form message from that function to my mailbox. It processes your name, your email address and the message itself in transit.',
+    basis: 'Art. 6(1)(b) or Art. 6(1)(f) GDPR, as for the contact form above.',
+    transfer: 'Confirmed with the provider before the contact form is published.',
+  },
+  {
+    name: 'UAB MailerLite (Vilnius, Lithuania — EU)',
+    purpose:
+      'Stores the email list and sends you the slides and materials from a talk you attended, plus occasional notices of new material. It processes your email address, any name you give, and whether you opened a message.',
+    basis:
+      'Art. 6(1)(a) GDPR — your consent, given when you ask for the materials. You can withdraw it at any time under Art. 7(3) GDPR, by the unsubscribe link in any message or by writing to me, with no effect on what was lawful before.',
+    transfer: 'Inside the EU.',
+  },
+  {
+    name: 'Scheduling service: ',
+    nameFact: operator.schedulingProvider,
+    purpose:
+      'Offers a booking page that the contact page links out to. Nothing reaches it until you follow that link; from then on its own privacy notice governs the booking.',
+    basis:
+      'Art. 6(1)(a) GDPR for following the link and Art. 6(1)(b) GDPR for the booking you then make.',
+    transfer: 'Confirmed with the provider before the scheduling link is published.',
+  },
+] as const;
+---
+
+<BaseLayout
+  title="Privacy notice — Dr. Wei-Hung Pan"
+  description="What personal data this site processes, which processors are involved, the legal basis for each, and why there is no cookie banner."
+>
+  <h1>Privacy notice</h1>
+
+  <p>
+    This notice says what personal data this site processes, who processes it, on what legal basis,
+    and what you can require of me. It is written to be read rather than to be survived.
+  </p>
+
+  <h2>Who is responsible</h2>
+
+  <p>
+    The controller for the processing described here is {operator.legalName},
+    <Fact value={operator.postalAddress} />, reachable at <Fact value={operator.email} />. The full
+    operator details are in the <a href="/impressum/">Impressum</a>. The site is small enough that
+    no data protection officer is required under Art. 37 GDPR; write to the address above instead.
+  </p>
+
+  <h2>There are no cookies and no cookie banner</h2>
+
+  <p>
+    This site sets no cookies, stores nothing in your browser to recognise you by, and runs no
+    advertising or social-network script. The analytics it uses is cookie-free, which is the reason
+    it may run without asking your consent and the reason you are not interrupted by a banner. If a
+    cookie-setting service is ever added, consent will be asked for before it loads.
+  </p>
+
+  <h2>Reading a page</h2>
+
+  <p>
+    Requesting a page transmits your IP address, the page requested, the time, and what your browser
+    says about itself. The host needs this to answer the request and to block abuse. It is kept
+    briefly for that purpose and is not used to identify you or combined with anything else.
+  </p>
+
+  <h2>Measuring which pages are read</h2>
+
+  <p>
+    Page views are counted with Cloudflare Web Analytics. It is cookie-free and stores no identifier
+    on your device, so it cannot follow you between sites or build a profile of you. I see aggregate
+    counts, not visitors.
+  </p>
+
+  <h2>The contact form, and writing to me directly</h2>
+
+  <p>
+    What you type into the contact form — your name, your email address and your message — is passed
+    by a function on the host to a transactional email provider, which delivers it to my mailbox. I
+    keep the correspondence for as long as the enquiry is live and afterwards for as long as a
+    commercial or tax rule requires, and I use it only to answer you. Writing to me directly by email
+    or telephone is always an alternative, and the same applies to what you send that way.
+  </p>
+
+  <h2>The email list</h2>
+
+  <p>
+    If you ask for the slides and materials from a talk, your email address goes to MailerLite, which
+    stores the list and sends the material. The legal basis is your consent; the unsubscribe link in
+    every message withdraws it, and withdrawing removes you from the list. I never sell or lend the
+    list, and I do not use it to target advertising.
+  </p>
+
+  <h2>Testimonials, and the consent records I hold</h2>
+
+  <p>
+    Where this site quotes a <strong>Client</strong> by name, the quote, the person's name, their
+    role and their institution are their personal data, published on the legal basis of their
+    consent under Art. 6(1)(a) GDPR. Because Art. 7(1) GDPR requires me to be able to demonstrate
+    that consent, <strong
+      >I hold a written consent record for every testimonial published on this site</strong
+    > — who consented, to what wording, and when. A quote whose consent record is missing is not
+    published at all. Consent is withdrawable at any time under Art. 7(3) GDPR; on withdrawal the
+    quote comes off the site and the record is kept only as long as I may need it to show the
+    publication was lawful while it stood.
+  </p>
+
+  <h2>Photographs, and the publication consents I hold</h2>
+
+  <p>
+    <strong>Workshop</strong> photographs show real rooms and real people. Where a face is
+    identifiable, German image rights apply in addition to the GDPR, so
+    <strong
+      >I hold a written publication consent for every identifiable person shown on this site</strong
+    >, under Art. 6(1)(a) GDPR and §22 of the German Act on Copyright in Works of Art (KUG). Where
+    that consent is not complete, the photograph is framed so that no attendee is identifiable. A
+    publication consent can be withdrawn on the same terms as any other.
+  </p>
+
+  <h2>Every processor, and the legal basis for each</h2>
+
+  <p>
+    Each of these acts on my instructions under a contract meeting Art. 28 GDPR, except where a row
+    says a service is reached by following a link, in which case that provider is a controller in its
+    own right.
+  </p>
+
+  <!--
+    A scroll container, labelled and focusable, so a phone scrolls the table
+    rather than the page and a keyboard visitor can scroll it without a mouse.
+  -->
+  <div
+    role="region"
+    aria-label="Processors, and the legal basis for each"
+    tabindex="0"
+    class="overflow-x-auto"
+  >
+    <table class="min-w-2xl">
+      <thead>
+        <tr>
+          <th scope="col">Processor</th>
+          <th scope="col">What it does</th>
+          <th scope="col">Legal basis</th>
+          <th scope="col">Where, and on what transfer basis</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          processors.map((processor) => (
+            <tr>
+              <th scope="row">
+                {processor.name}
+                {'nameFact' in processor && <Fact value={processor.nameFact} />}
+              </th>
+              <td>{processor.purpose}</td>
+              <td>{processor.basis}</td>
+              <td>{processor.transfer}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h2>How long anything is kept</h2>
+
+  <p>
+    Server and analytics records are kept briefly and in aggregate. Correspondence is kept while the
+    enquiry is live and then for as long as a commercial or tax retention rule requires. An email
+    address on the list is kept until you unsubscribe. A consent record is kept while the consented
+    publication stands, and afterwards only for as long as I may need it to show that the publication
+    was lawful.
+  </p>
+
+  <h2>What you can require of me</h2>
+
+  <p>
+    You have the right to ask what data about you I hold and to receive a copy (Art. 15 GDPR), to
+    have it corrected (Art. 16), to have it erased (Art. 17), to have its processing restricted (Art.
+    18), to receive it in a portable form (Art. 20), and to object to processing based on a
+    legitimate interest (Art. 21). Where processing rests on your consent you may withdraw it at any
+    time (Art. 7(3)). Write to <Fact value={operator.email} /> and I will answer within a month, as
+    Art. 12(3) GDPR requires.
+  </p>
+
+  <p>
+    You may also complain to a data protection supervisory authority under Art. 77 GDPR. The one
+    competent for me is <Fact value={operator.supervisoryAuthority} />; you may equally complain to
+    the authority where you live or work.
+  </p>
+
+  <h2>What this site does not do</h2>
+
+  <p>
+    There is no automated decision-making and no profiling within the meaning of Art. 22 GDPR, no
+    advertising network, no social-network tracking, and no sale or sharing of your data. Nothing on
+    this site is aimed at children. Giving me your data is never a condition of reading anything
+    here: every page can be read without submitting anything.
+  </p>
+
+  <h2>Changes</h2>
+
+  <p>
+    If a processor or a purpose changes, this notice changes with it before the change goes live.
+    Last reviewed {legalLastReviewed}.
+  </p>
+</BaseLayout>

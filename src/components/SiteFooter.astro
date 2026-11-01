@@ -1,0 +1,49 @@
+---
+/**
+ * The footer every page wears.
+ *
+ * Its job is the one §5 DDG imposes: the Impressum — and with it the privacy
+ * notice — is reachable from wherever a visitor is. The links come from
+ * `src/lib/navigation.ts`, filtered to routes the build emitted, so the footer
+ * cannot point at a page that is not there.
+ *
+ * Later tickets use this component as it is; a page added later gets the
+ * legal links by using `BaseLayout`, with nothing to wire up.
+ */
+import { chromeText, legalNav } from '../lib/navigation';
+import type { Locale } from '../lib/i18n';
+
+interface Props {
+  /** The language this page is written in. */
+  locale: Locale;
+  /** The name shown in the copyright line. */
+  siteName: string;
+}
+
+const { locale, siteName } = Astro.props;
+
+const links = legalNav(locale);
+const { legalNavLabel } = chromeText[locale];
+---
+
+<footer class="mt-16 border-t border-border">
+  <div
+    class="mx-auto flex max-w-(--text-measure) flex-col gap-3 px-4 py-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between"
+  >
+    <p>&copy; {new Date().getFullYear()} {siteName}</p>
+
+    <nav aria-label={legalNavLabel}>
+      <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        {
+          links.map((link) => (
+            <li>
+              <a href={link.href} class="text-muted underline-offset-4 hover:text-fg">
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</footer>
