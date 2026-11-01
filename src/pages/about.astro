@@ -1,0 +1,115 @@
+---
+/**
+ * The about page: the page a hiring manager and a careful Researcher read.
+ *
+ * Everything checkable on it — the dated timeline, the publication list, the
+ * awards — is rendered from the language-neutral records in `src/data/`, so
+ * this page and `/zh/about/` can never show a different number of papers.
+ * The prose around them is written for an English reader rather than
+ * translated into one.
+ *
+ * This is also the one page on the site that names the current employer. The
+ * employer appears nowhere near an offer, and `tests/about.test.ts` asserts
+ * that over every built page.
+ */
+import AwardList from '../components/AwardList.astro';
+import CareerTimeline from '../components/CareerTimeline.astro';
+import Fact from '../components/Fact.astro';
+import PublicationList from '../components/PublicationList.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { routeExists } from '../lib/i18n';
+import { unknown } from '../lib/legal';
+import { currentEmployer } from '../lib/records';
+
+const employer = await currentEmployer();
+
+/**
+ * The faith stream, when it has been built.
+ *
+ * The faith paragraph is live from day one; the stream it points at is only
+ * built once a faith entry exists. The link falls back to the writing index
+ * and, failing that, is not rendered at all — a paragraph without a link is
+ * honest, a link to a page that was never built is not.
+ */
+const faithStream = ['/writing/faith/', '/writing/'].find(routeExists);
+
+/** The teaching record, likewise linked only once it exists. */
+const teachingRecord = routeExists('/teaching/') ? '/teaching/' : undefined;
+---
+
+<BaseLayout
+  title="About Dr. Wei-Hung Pan — career, publications and awards"
+  description="A dated career timeline from 2012 onwards, the full publication list, awards, and a two-page PDF CV."
+>
+  <h1>About</h1>
+
+  <p>
+    I have worked with health and clinical data since 2012, starting at the National Health Research
+    Institutes (NHRI) in Taiwan, where I also did my doctoral work and took my PhD in
+    bioinformatics. Since then I have spent a decade in pharmaceutical early-phase drug development,
+    where I both build the data infrastructure a study runs on and run the statistics on it —
+    currently at <Fact value={employer?.organisation ?? unknown("current employer's name")} />.
+  </p>
+
+  <p>
+    Since 2022 I have taught at German universities, as Adjunct Lecturer in Mathematics &amp;
+    Statistics at the University of Europe for Applied Sciences and as a lecturer at the Berliner
+    Hochschule für Technik. I teach statistics, machine learning and AI to research teams and
+    companies in Taiwan and Germany, in Mandarin, English or German.{
+      teachingRecord && (
+        <>
+          {' '}
+          The <a href={teachingRecord}>teaching record</a> lists the courses, workshops and talks
+          with their dates and venues.
+        </>
+      )
+    }
+  </p>
+
+  <figure>
+    <Fact
+      value={unknown(
+        'headshot photograph — a plain professional portrait, with publication consent on file',
+      )}
+    />
+    <figcaption>Dr. Wei-Hung Pan</figcaption>
+  </figure>
+
+  <p>
+    <a href="/cv.pdf" download>Download the two-page PDF CV</a>. It carries its revision date inside
+    the document, so this link stays the same each time the CV is updated.
+  </p>
+
+  <section id="career" aria-labelledby="career-heading">
+    <h2 id="career-heading">Career timeline</h2>
+    <CareerTimeline locale="en" />
+  </section>
+
+  <section id="publications" aria-labelledby="publications-heading">
+    <h2 id="publications-heading">Publications</h2>
+    <PublicationList />
+  </section>
+
+  <section id="awards" aria-labelledby="awards-heading">
+    <h2 id="awards-heading">Awards</h2>
+    <AwardList locale="en" />
+  </section>
+
+  <section aria-labelledby="faith-heading">
+    <h2 id="faith-heading">Faith</h2>
+    <p>
+      I am a Christian, and it shapes how I work and how I treat the people I work with. It is not
+      part of what I sell: there is nothing about it on any service page, and no client of mine has
+      had to hear about it. I write about it separately{
+        faithStream ? (
+          <>
+            , in <a href={faithStream}>its own stream</a>, which is there if you want it and easy to
+            leave alone if you do not
+          </>
+        ) : (
+          ', in its own stream, which is published here as it is written and easy to leave alone'
+        )
+      }.
+    </p>
+  </section>
+</BaseLayout>

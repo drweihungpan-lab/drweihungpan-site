@@ -10,7 +10,13 @@ import { type TrialBuild, buildWithEntries } from './writing-build';
  * of entries. See `tests/writing-build.ts` for why that is safe.
  */
 
-const ONE_MINUTE = 60_000;
+/**
+ * Each case below runs an `astro build`, and three test files in this suite
+ * now do so. A loaded machine — a CI box, or several of these builds queued
+ * behind each other — can make one take far longer than it does alone, and a
+ * timeout here would report as a failure of the rule being asserted.
+ */
+const A_FEW_MINUTES = 240_000;
 
 /** A valid entry. Everything a piece needs is in these five frontmatter lines. */
 const entry = (name: string, overrides: Record<string, string> = {}): string => {
@@ -55,7 +61,7 @@ describe('a site with no faith entry published', () => {
 
   beforeAll(() => {
     build = buildWithEntries({});
-  }, ONE_MINUTE);
+  }, A_FEW_MINUTES);
 
   it('builds', () => {
     expect(build.ok, build.output).toBe(true);
@@ -93,7 +99,7 @@ describe('a malformed entry', () => {
         '\n',
       ),
     });
-  }, ONE_MINUTE);
+  }, A_FEW_MINUTES);
 
   it('fails the build', () => {
     expect(build.ok).toBe(false);
@@ -120,7 +126,7 @@ describe('an entry with a misspelled key', () => {
 
   beforeAll(() => {
     build = buildWithEntries({ 'typo.md': entry('Typo', { drafts: 'true' }) });
-  }, ONE_MINUTE);
+  }, A_FEW_MINUTES);
 
   it('fails the build rather than quietly publishing it', () => {
     expect(build.ok).toBe(false);
@@ -142,7 +148,7 @@ describe('a mixed set of entries', () => {
       'unfinished.md': entry('Unfinished', { draft: 'true' }),
       'chinese.md': entry('Chinese', { lang: "'zh'" }),
     });
-  }, ONE_MINUTE);
+  }, A_FEW_MINUTES);
 
   it('publishes the finished entry', () => {
     expect(build.ok, build.output).toBe(true);

@@ -33,11 +33,7 @@ describe('the writing index', () => {
 
   /** The reader's path to it: the spec wants his writing reachable from the main navigation. */
   it('is reachable from the main navigation', () => {
-    const navigated = page('/')('header nav a[href]:not([hreflang])')
-      .map((_, element) => page('/')(element).attr('href'))
-      .get();
-
-    expect(navigated).toContain('/writing/');
+    expect(hrefsIn(page('/'), 'header nav a[href]:not([hreflang])')).toContain('/writing/');
   });
 });
 
@@ -70,7 +66,9 @@ describe('professional writing', () => {
   it('is hosted nowhere on this site', () => {
     const hostedUnderWriting = allRoutes().filter(
       (route) =>
-        route.startsWith('/writing/') && route !== '/writing/' && !route.startsWith('/writing/faith/'),
+        route.startsWith('/writing/') &&
+        route !== '/writing/' &&
+        !route.startsWith('/writing/faith/'),
     );
 
     expect(hostedUnderWriting).toEqual([]);
@@ -154,15 +152,16 @@ describe('the faith navigation item', () => {
  * clearly labelled door in the navigation and on the about page, never
  * something encountered on the way through an offer.
  *
- * Written as one test over the service pages this build emitted, so the ticket
- * that adds them inherits the rule and does not have to find this file. It is
- * vacuous until the first service page exists, which is why it loops rather
- * than using `it.each` — an empty `it.each` errors instead of passing.
+ * Written over the service pages this build emitted rather than a list, so a
+ * service page added later inherits the rule without anyone finding this file.
+ * It loops rather than using `it.each` because a build with no service page in
+ * it is a state this suite has been in, and an empty `it.each` errors instead
+ * of passing.
  */
 describe('no service page', () => {
   const servicePages = (): string[] => allRoutes().filter((route) => route.includes('/services/'));
 
-  it('links into the faith stream or carries faith-stream content', () => {
+  it('carries faith-stream content or a link into the faith stream', () => {
     for (const route of servicePages()) {
       const $ = page(route);
 
