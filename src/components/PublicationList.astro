@@ -1,0 +1,33 @@
+---
+/**
+ * The full publication list, rendered from the one publication record.
+ *
+ * Nothing here is translated: a journal name, a year and an article title are
+ * the same in both languages, which is the whole reason the list is stored
+ * once. Both about pages therefore show the same papers, and adding one is a
+ * single edit to `src/data/publications.json`.
+ */
+import { publicationRecord } from '../lib/records';
+import Fact from './Fact.astro';
+
+const publications = await publicationRecord();
+---
+
+<ol class="space-y-4">
+  {
+    publications.map((publication) => (
+      <li>
+        <p><Fact value={publication.title} /></p>
+        <p>
+          <cite>{publication.journal}</cite>, {publication.year}
+          {publication.url && (
+            <>
+              {' '}
+              <a href={publication.url}>{publication.url}</a>
+            </>
+          )}
+        </p>
+      </li>
+    ))
+  }
+</ol>

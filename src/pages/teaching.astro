@@ -1,0 +1,146 @@
+---
+/**
+ * The teaching record: where he has taught, with dates and venues.
+ *
+ * The page holds no teaching facts of its own. Every session comes from
+ * `src/data/teaching.yaml` through `src/lib/teaching.ts`, which is what makes
+ * adding a session a single data edit and what makes the homepage's Workshop
+ * figure the length of this list rather than a number somebody typed.
+ *
+ * A kind with no sessions renders no heading, so the page never shows a visitor
+ * an empty section; the same rule governs a session's slides and repository
+ * links, which appear only where there is something to link to.
+ *
+ * English only: the spec puts Traditional Chinese for the teaching record out
+ * of scope, so there is deliberately no `/zh/teaching/` counterpart.
+ */
+import Fact from '../components/Fact.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { isUnknown } from '../lib/legal';
+import { type TeachingKind, sessionsOfKind, teachingDate, workshopCount } from '../lib/teaching';
+
+/**
+ * The three kinds, in the order a training buyer reads them: the public
+ * material first, because it is the thing they can judge without a sales call.
+ */
+const kinds: { kind: TeachingKind; heading: string; lead: string }[] = [
+  {
+    kind: 'course',
+    heading: 'Courses',
+    lead: 'Taught from material that is public, so you can read the real syllabus and exercises before contacting anyone.',
+  },
+  {
+    kind: 'workshop',
+    heading: 'Workshops',
+    lead: 'The same material delivered to a team as paid group training, on-site or remote, in Mandarin, English or German.',
+  },
+  {
+    kind: 'talk',
+    heading: 'Talks',
+    lead: 'Single speaking engagements, with the slides where they are public.',
+  },
+];
+
+const sections = await Promise.all(
+  kinds.map(async (kind) => ({ ...kind, sessions: await sessionsOfKind(kind.kind) })),
+);
+
+/**
+ * The Workshop figure is read through `workshopCount()` rather than counted
+ * from `sections` above, because it is the figure the homepage numbers band
+ * also shows: both pages go through the one accessor, so this page's test
+ * covers the homepage's claim as well. The other two counts are description.
+ */
+const workshops = await workshopCount();
+const counted = (count: number, singular: string): string =>
+  `${count} ${singular}${count === 1 ? '' : 's'}`;
+
+const courses = sections.find((section) => section.kind === 'course')?.sessions.length ?? 0;
+const talks = sections.find((section) => section.kind === 'talk')?.sessions.length ?? 0;
+---
+
+<BaseLayout
+  title="Teaching record — Dr. Wei-Hung Pan"
+  description="Courses, Workshops and talks with dates and venues, slides where they exist, and links to the public Course repositories."
+>
+  <h1>Teaching record</h1>
+
+  <p>
+    Every Course, Workshop and talk I have delivered, with the date and the venue, so that a team
+    lead can see whether I can hold a room and a hiring manager can check my delivery experience
+    against my claims. I teach statistics, machine learning and AI to research teams and university
+    students in Taiwan and Germany, in Mandarin, English or German.
+  </p>
+
+  <p>
+    This record lists {counted(workshops, 'Workshop')}, {counted(courses, 'Course')} and {
+      counted(talks, 'talk')
+    }, most recent first. The Workshop figure elsewhere on this site is this list's length, so it
+    can never claim more than this page can show.
+  </p>
+
+  {
+    sections.map(
+      ({ heading, lead, sessions }) =>
+        sessions.length > 0 && (
+          <section>
+            <h2>{heading}</h2>
+            <p>{lead}</p>
+
+            {sessions.map((session) => (
+              <article>
+                <h3><Fact value={session.title} /></h3>
+
+                <dl>
+                  <dt>Date</dt>
+                  <dd>
+                    {isUnknown(session.date) ? (
+                      <Fact value={session.date} />
+                    ) : (
+                      <time datetime={session.date}>
+                        {teachingDate(session.date, session.ongoing)}
+                      </time>
+                    )}
+                  </dd>
+
+                  <dt>Venue</dt>
+                  <dd><Fact value={session.venue} /></dd>
+
+                  {session.audience && (
+                    <>
+                      <dt>Audience</dt>
+                      <dd>{session.audience}</dd>
+                    </>
+                  )}
+
+                  {session.format && (
+                    <>
+                      <dt>Format</dt>
+                      <dd>{session.format}</dd>
+                    </>
+                  )}
+                </dl>
+
+                {session.note && <p>{session.note}</p>}
+
+                {
+                  /*
+                   * Rendered only where there is something to link to: an
+                   * empty "Slides" affordance promises a visitor a file that
+                   * does not exist.
+                   */
+                  (session.repository || session.slides) && (
+                    <p>
+                      {session.repository && <a href={session.repository}>Course repository</a>}
+                      {session.repository && session.slides && ' · '}
+                      {session.slides && <a href={session.slides}>Slides</a>}
+                    </p>
+                  )
+                }
+              </article>
+            ))}
+          </section>
+        ),
+    )
+  }
+</BaseLayout>

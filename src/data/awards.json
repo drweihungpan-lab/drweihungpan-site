@@ -1,0 +1,22 @@
+[
+  {
+    "id": "esri-2019",
+    "title": "Best AI Use Case",
+    "awarder": "Esri User Conference",
+    "year": 2019,
+    "detail": {
+      "en": "Deep learning for predictive road-quality maintenance, on the German A70 motorway.",
+      "zh": "以深度學習預測道路品質與養護需求，應用於德國 A70 高速公路。"
+    }
+  },
+  {
+    "id": "bht-2023",
+    "title": "Top 25 of approximately 400 lecturers",
+    "awarder": "Berliner Hochschule für Technik",
+    "year": 2023,
+    "detail": {
+      "en": "Student teaching evaluation across the university's lecturers.",
+      "zh": "全校講師學生教學評鑑結果。"
+    }
+  }
+]

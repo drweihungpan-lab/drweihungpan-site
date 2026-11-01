@@ -1,0 +1,91 @@
+---
+/**
+ * The page chrome every page is built from.
+ *
+ * It owns the four things that must be right on every page and are easy to get
+ * wrong on one: the language attribute, the document head, the keyboard path
+ * into the content, and whether a Chinese web font is loaded at all.
+ *
+ * The visible chrome is composed from `SiteHeader` and `SiteFooter`, which take
+ * no list of links: they derive the navigation and the legal links from the
+ * architecture in `src/lib/navigation.ts`, filtered to the routes the build
+ * emitted. A page therefore gets the header, the footer, the legal links and
+ * the language switcher by using this layout and nothing else — there is
+ * nothing for a new page to wire up and nothing in those components for it to
+ * change.
+ *
+ * `counterpart()` is resolved once here and handed to the header, so the head's
+ * `hreflang` link and the visible switcher can never disagree about whether the
+ * other language exists.
+ */
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { zhFont, zhFontFaceCss } from '../lib/fonts';
+import { chrome, counterpart, languageTag, otherLocale, resolveLocale } from '../lib/i18n';
+import '../styles/global.css';
+
+interface Props {
+  /** The browser-tab and search-result title for this page. */
+  title: string;
+  /** One sentence describing the page, for search results and link previews. */
+  description: string;
+}
+
+const { title, description } = Astro.props;
+
+const locale = resolveLocale(Astro.currentLocale);
+const isZh = locale === 'zh';
+const { skipToContent, siteName } = chrome[locale];
+
+/**
+ * The same page in the other language, or `undefined`. A page announces its
+ * counterpart only when one was built, so a visitor is never sent to a page
+ * that is not there. The language switcher is built on the same helper.
+ */
+const alternate = counterpart(Astro.url.pathname);
+---
+
+<!doctype html>
+<html lang={languageTag(locale)}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    {
+      alternate && (
+        <link rel="alternate" hreflang={languageTag(otherLocale(locale))} href={alternate} />
+      )
+    }
+    {
+      /*
+       * Chinese pages only. The preload starts the subset download before the
+       * stylesheet is parsed, because Chinese headings are the largest element
+       * painted; `crossorigin` is required for fonts even on the same origin.
+       * An English page receives neither tag and no `@font-face` rule at all.
+       */
+      isZh && (
+        <>
+          <link rel="preload" href={zhFont.url} as="font" type="font/woff2" crossorigin />
+          <style is:inline set:html={zhFontFaceCss} />
+        </>
+      )
+    }
+  </head>
+  <body>
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-10 focus:rounded focus:bg-surface focus:px-4 focus:py-2"
+      >{skipToContent}</a
+    >
+
+    <SiteHeader locale={locale} siteName={siteName} counterpart={alternate} />
+
+    <main id="main" class="mx-auto max-w-(--text-measure) px-4 py-10">
+      <slot />
+    </main>
+
+    <SiteFooter locale={locale} siteName={siteName} />
+  </body>
+</html>

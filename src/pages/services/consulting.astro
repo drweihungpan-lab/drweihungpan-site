@@ -1,0 +1,118 @@
+---
+/**
+ * Biostatistics consulting — the quiet offer.
+ *
+ * The one offer the site lists without promoting. ADR-0001 keeps it
+ * unpromoted and the spec gives it no homepage card: the sales cycle is long,
+ * and the work a small biotech most often wants from a biostatistician is the
+ * work that feeds a regulatory submission, which carries liability and
+ * conflict-of-interest exposure the other offers do not. So this page is
+ * reachable from the navigation, honest about its limits, and does nothing to
+ * recruit.
+ *
+ * Which makes the "what I do not do" section the point of the page rather than
+ * a disclaimer at the end of it: a company whose question is a submission
+ * should learn that here, in four seconds, instead of in a reply three days
+ * after an email. `GLOSSARY.md` reserves the word "consulting" for exactly
+ * this offer — statistics for a Researcher's paper is **Analysis**, which has
+ * its own page and its own credit policy (ADR-0002, not restated here).
+ */
+import ContactCallToAction from '../../components/ContactCallToAction.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { href } from '../../lib/i18n';
+---
+
+<BaseLayout
+  title="Biostatistics consulting — Dr. Wei-Hung Pan"
+  description="Study design, sample-size calculation, statistical analysis plans and analysis for small biotech and academic groups. Regulatory submission work is not offered."
+>
+  <h1>Biostatistics consulting for small biotech and academic groups</h1>
+
+  <p>
+    A group with a study to run and no statistician in it can buy the statistical function for
+    that study rather than hire one. I have worked with health and clinical data since 2012, in
+    early-phase development and in academic research, and this is the offer for a company or a
+    group that needs the methods decided properly before anything is measured.
+  </p>
+
+  <p>
+    It is a small part of what I do, and engagements are taken a few at a time, so the honest
+    answer is sometimes no, or not yet.
+  </p>
+
+  <h2>What is in scope</h2>
+
+  <ul>
+    <li>
+      <strong>Study design.</strong> Endpoint choice, comparator and randomisation, the design that
+      can actually answer the question being asked, and the assumptions it rests on written down
+      while they can still be changed.
+    </li>
+    <li>
+      <strong>Sample size and power.</strong> The calculation, the inputs it depends on, and what
+      happens to the study if those inputs turn out to be optimistic.
+    </li>
+    <li>
+      <strong>A statistical analysis plan.</strong> Pre-specified analyses, handling of missing
+      data, multiplicity and interim looks, authored as a document your team and your reviewers
+      can follow.
+    </li>
+    <li>
+      <strong>The analysis itself.</strong> Results, tables and figures, with reproducible analysis
+      code that a colleague of yours can re-run after I am gone.
+    </li>
+    <li>
+      <strong>A read of an analysis you already have.</strong> An independent look at methods and
+      conclusions somebody else produced, before you build a decision on them.
+    </li>
+  </ul>
+
+  <h2>What I do not do</h2>
+
+  <ul>
+    <li>
+      <strong>Regulatory submission work.</strong> Nothing that feeds a filing to a regulator: no
+      submission-grade datasets or documentation, no analysis that a marketing application rests
+      on, and no acting as the statistician of record for a submission. This is a firm line, not a
+      matter of scope or fee.
+    </li>
+    <li>
+      <strong>Validation under that scope.</strong> No qualification or validation of computerised
+      systems intended to support a regulated filing, and no quality-system documentation.
+    </li>
+    <li>
+      <strong>Hourly staff augmentation.</strong> Engagements are fixed-scope packages. I am not a
+      seat on your team to be booked by the month against a backlog somebody else prioritises.
+    </li>
+    <li>
+      <strong>Writing your paper or your report.</strong> I can run the analysis and describe the
+      methods; the document around it stays yours.
+    </li>
+  </ul>
+
+  <h2>How it is bought</h2>
+
+  <p>
+    Every engagement is a <strong>fixed-scope</strong> package with the deliverable and the
+    timeline written down before any work starts, and there are
+    <strong>no published prices</strong> — send the study and you get a written scope and a quote
+    for it. A design question is the cheapest thing on this page to buy and the most expensive one
+    to skip: almost nothing can be rescued by statistics after the data has been collected the
+    wrong way.
+  </p>
+
+  <p>
+    If what you actually need is the statistics for a paper, that is
+    <a href={href('en', 'services/statistics')}>Analysis</a>, which has its own page and states
+    plainly how credit is handled. If the problem is that the data underneath the study does not
+    exist in a usable form yet, that is
+    <a href={href('en', 'services/engineering')}>Engineering</a>.
+  </p>
+
+  <ContactCallToAction
+    locale="en"
+    heading="Send me the study"
+    body="Describe the study, where it is in its life, and the decision that depends on it. You get a written scope and a fixed price — or a plain note that it is submission work, or that I have no capacity."
+    action="Request a quote"
+  />
+</BaseLayout>

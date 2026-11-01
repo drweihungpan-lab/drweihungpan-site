@@ -1,0 +1,131 @@
+# The teaching record: every Course, Workshop and talk, in one place.
+#
+# This file is the source of truth for the `/teaching/` page AND for the
+# Workshop count in the homepage numbers band. The count is the number of
+# `kind: workshop` entries here, so the claim can never drift from the evidence
+# behind it — adding a delivered Workshop below raises the homepage figure, and
+# nothing else has to change.
+#
+# ADDING A SESSION (the whole job — no page to edit):
+#   1. Copy the block shape below under the right kind.
+#   2. `kind` is one of:
+#        course    — a run of a Course: a university module or a multi-week course.
+#        workshop  — a paid group delivery to a team or organisation, derived
+#                    from a Course. These are what the homepage counts.
+#        talk      — a single speaking engagement.
+#   3. `title`, `venue` and `date` are required. `date` is `YYYY`, `YYYY-MM` or
+#      `YYYY-MM-DD`, in quotes — write only the precision you are sure of.
+#   4. Everything else is optional and simply does not render when absent:
+#      `ongoing`, `audience`, `format`, `note`, `slides`, `repository`.
+#   5. A fact you do not have yet is written `{ unknown: "what is missing" }`.
+#      It then renders as a visible "TO BE SUPPLIED" mark rather than as a
+#      silent blank. Replace it with the real value when you have it.
+#
+# A malformed entry — an unknown kind, a missing venue, a mistyped key, a date
+# that is not a date — fails the build. See tests/teaching.test.ts.
+
+# ---------------------------------------------------------------- Courses ----
+
+- id: 3r-nthu-2026-11
+  kind: course
+  title: Repeatability, Reproducibility, and Replicability
+  venue: National Tsing Hua University, Taiwan
+  date: "2026-11"
+  audience: 20 statistics master's students, familiar with Python and basic regression
+  format: Five sessions of 170 minutes — 14 hours in all — taught in English
+  note: >-
+    The engineering framework behind repeatable data processing: isolated
+    environments, collaborative Git workflows, reusable Python packages, tests,
+    continuous integration, APIs and containers. One running example grows from
+    a messy notebook into a containerised application.
+  repository: https://github.com/drweihungpan-lab/3R-teaching
+  slides: https://github.com/drweihungpan-lab/3R-teaching/tree/main/materials/slides
+
+- id: clinical-development-nthu-2026-11
+  kind: course
+  title: Clinical development for statistics master's students
+  venue: National Tsing Hua University, Taiwan
+  date: "2026-11"
+  audience: Statistics master's students; no programming required
+  format: Three sessions of two hours — six hours in all
+  note: >-
+    How a development question becomes a clinical study; the professional roles
+    that turn observations into trustworthy evidence, clinical data and AI; and
+    what changes when a product measures rather than treats, in the EU data
+    context.
+  repository: https://github.com/drweihungpan-lab/clinical-data-teaching
+  slides: https://github.com/drweihungpan-lab/clinical-data-teaching/tree/main/slides
+
+- id: university-of-europe-mathematics-statistics
+  kind: course
+  title: Mathematics & Statistics
+  venue: University of Europe for Applied Sciences, Germany
+  date: "2022"
+  ongoing: true
+  note: Taught as Adjunct Lecturer in Mathematics & Statistics.
+
+# Real venue, real year, real standing. The module he taught there is not on
+# record in the design file, so the title says so rather than guessing.
+- id: berliner-hochschule-fuer-technik-2023
+  kind: course
+  title:
+    unknown: the module taught at Berliner Hochschule für Technik — its subject and level
+  venue: Berliner Hochschule für Technik, Berlin
+  date: "2023"
+  note: Rated in the top 25 of approximately 400 lecturers at the institution in 2023.
+
+# -------------------------------------------------------------- Workshops ----
+#
+# PLACEHOLDERS. The owner has delivered 15 or more Workshops; which ones, to
+# whom and when is not on record anywhere this file could draw on, and a venue
+# and a date were not invented for them. The two entries below are the two real
+# Workshop offers, each derived from the Course above it, waiting for the
+# delivery details.
+#
+# The homepage figure is this section's length, so it reads low until these are
+# filled in and one entry is added per further delivery. That is the trade the
+# derived count makes: understating is recoverable, and a hardcoded 15 beside an
+# empty record is not.
+
+- id: workshop-reproducible-pipelines
+  kind: workshop
+  title: Reproducible analysis pipelines for clinical data teams
+  venue:
+    unknown: the organisation this Workshop was delivered to
+  date:
+    unknown: the month this Workshop was delivered
+  note: >-
+    Isolated environments, Git collaboration, reusable packages, tests,
+    continuous integration, APIs and containers, for a team that already has
+    data and needs the workflow around it.
+  repository: https://github.com/drweihungpan-lab/3R-teaching
+
+- id: workshop-clinical-development
+  kind: workshop
+  title: Clinical development for data scientists
+  venue:
+    unknown: the organisation this Workshop was delivered to
+  date:
+    unknown: the month this Workshop was delivered
+  note: >-
+    Trials and the industry, professional roles, clinical data and AI,
+    diagnostics and the EU data context, for a data team moving into clinical
+    work.
+  repository: https://github.com/drweihungpan-lab/clinical-data-teaching
+
+# ------------------------------------------------------------------ Talks ----
+#
+# PLACEHOLDER. The funnel this site is built for is talks, but no specific talk
+# is on record in the design file, so none is asserted here. One candidate the
+# owner can confirm: the Esri User Conference 2019, where the predictive
+# road-quality work on the German A70 won Best AI Use Case — the award is on
+# record, a talk is not.
+
+- id: talk-to-be-supplied
+  kind: talk
+  title:
+    unknown: the title of the talk
+  venue:
+    unknown: the conference, institution or company it was given at
+  date:
+    unknown: the month it was given

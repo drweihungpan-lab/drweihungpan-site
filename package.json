@@ -1,0 +1,36 @@
+{
+  "name": "drweihungpan-site",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Personal website for Dr. Wei-Hung Pan",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20.3"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "cv:pdf": "node scripts/build-cv-pdf.mjs",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "vitest run",
+    "verify": "npm run build && SKIP_BUILD=1 vitest run",
+    "font:subset": "node scripts/subset-zh-font.mjs"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "astro": "5.18.2",
+    "tailwindcss": "4.3.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@types/fontkit": "2.0.9",
+    "@types/node": "26.6.6",
+    "cheerio": "1.2.0",
+    "fontkit": "2.0.4",
+    "subset-font": "2.9.0",
+    "typescript": "5.9.3",
+    "vitest": "5.0.5"
+  }
+}

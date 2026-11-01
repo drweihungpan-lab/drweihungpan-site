@@ -1,0 +1,133 @@
+---
+/**
+ * The operator statement §5 DDG requires of a site operated from Germany.
+ *
+ * German, because that is the language the duty is owed in and the version a
+ * German authority or a competitor's lawyer reads; an English rendering of the
+ * same facts follows it for the rest of the audience. There is deliberately no
+ * Traditional Chinese counterpart — the spec puts one out of scope — which
+ * makes this page the live negative case for the language-switcher rule.
+ *
+ * Every fact the owner has not yet supplied comes from `src/lib/legal.ts` and
+ * renders as a visibly marked placeholder rather than as a guess.
+ */
+import Fact from '../components/Fact.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { legalLastReviewed, operator } from '../lib/legal';
+---
+
+<BaseLayout
+  title="Impressum — Dr. Wei-Hung Pan"
+  description="Operator details for this site under §5 DDG, in German with an English rendering."
+>
+  <h1>Impressum</h1>
+
+  <p>
+    The German text below is the operator statement required by §5 of the German Digital Services
+    Act (DDG) and is the authoritative version. <a href="#in-english">An English rendering</a> of
+    the same details follows it.
+  </p>
+
+  <section lang="de">
+    <h2>Angaben gemäß § 5 DDG</h2>
+
+    <p>
+      {operator.legalName}<br />
+      <Fact value={operator.postalAddress} />
+    </p>
+
+    <h2>Kontakt</h2>
+
+    <p>
+      Telefon: <Fact value={operator.telephone} /><br />
+      E-Mail: <Fact value={operator.email} />
+    </p>
+
+    <h2>Umsatzsteuer-Identifikationsnummer</h2>
+
+    <p>
+      Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:
+      <Fact value={operator.vatId} />
+    </p>
+
+    <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+
+    <p>
+      {operator.legalName}, <Fact value={operator.postalAddress} />
+    </p>
+
+    <h2>Datenschutz</h2>
+
+    <p>
+      Welche personenbezogenen Daten diese Website verarbeitet, zu welchem Zweck und auf welcher
+      Rechtsgrundlage, steht in der <a href="/privacy/">Datenschutzerklärung</a>. Diese Website setzt
+      keine Cookies und benötigt daher kein Cookie-Banner.
+    </p>
+
+    <h2>Verbraucherstreitbeilegung</h2>
+
+    <p>
+      Ich bin nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer
+      Verbraucherschlichtungsstelle teilzunehmen.
+    </p>
+
+    <h2>Haftung für Inhalte</h2>
+
+    <p>
+      Als Diensteanbieter bin ich gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den
+      allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG bin ich als Diensteanbieter jedoch
+      nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach
+      Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur
+      Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben
+      hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis
+      einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden entsprechender Rechtsverletzungen
+      werde ich diese Inhalte unverzüglich entfernen.
+    </p>
+
+    <h2>Haftung für Links</h2>
+
+    <p>
+      Dieses Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte ich keinen
+      Einfluss habe. Deshalb kann ich für diese fremden Inhalte keine Gewähr übernehmen. Für die
+      Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten
+      verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche
+      Rechtsverstöße überprüft; rechtswidrige Inhalte waren zu diesem Zeitpunkt nicht erkennbar. Eine
+      permanente inhaltliche Kontrolle der verlinkten Seiten ist ohne konkrete Anhaltspunkte einer
+      Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werde ich derartige
+      Links unverzüglich entfernen.
+    </p>
+
+    <h2>Urheberrecht</h2>
+
+    <p>
+      Die von mir erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen
+      Urheberrecht. Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb
+      der Grenzen des Urheberrechts bedürfen meiner schriftlichen Zustimmung. Lehrmaterialien, die in
+      einem öffentlichen Repository veröffentlicht sind, stehen unter der dort angegebenen Lizenz.
+      Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch
+      gestattet.
+    </p>
+  </section>
+
+  <section id="in-english">
+    <h2>In English</h2>
+
+    <p>
+      This is a rendering of the German statement above, which remains the authoritative version.
+      This site is operated by {operator.legalName}, at <Fact value={operator.postalAddress} />,
+      reachable by telephone on <Fact value={operator.telephone} /> and by email at
+      <Fact value={operator.email} />. The VAT identification number under §27a of the German VAT
+      Act is <Fact value={operator.vatId} />. {operator.legalName} is also responsible for the
+      editorial content of this site under §18(2) of the German Interstate Media Treaty (MStV).
+    </p>
+
+    <p>
+      What personal data this site processes, for what purpose and on what legal basis is set out in
+      the <a href="/privacy/">privacy notice</a>. The site sets no cookies, which is why it shows no
+      cookie banner. I am not obliged, and not willing, to take part in dispute resolution
+      proceedings before a consumer arbitration board.
+    </p>
+
+    <p>Last reviewed {legalLastReviewed}.</p>
+  </section>
+</BaseLayout>
