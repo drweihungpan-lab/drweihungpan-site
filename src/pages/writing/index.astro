@@ -1,0 +1,85 @@
+---
+/**
+ * The writing index: one door, two streams that live in different places.
+ *
+ * Professional pieces stay on the platform that already publishes them and are
+ * linked out to; faith pieces are hosted here. The split is not tidiness —
+ * that platform has one profile and one feed, so a faith piece published there
+ * would arrive in front of every Client who followed the professional writing,
+ * which is exactly the separation the design built.
+ *
+ * Nothing on this page is a list anyone has to keep in step with the content.
+ * Professional pieces come from `professionalWriting` and faith pieces from the
+ * collection, so the page needs no edit when a piece is published. The faith
+ * half renders itself away with the stream, and the page then says nothing
+ * about a stream that has nothing in it.
+ */
+import Fact from '../../components/Fact.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import {
+  PROFESSIONAL_PLATFORM,
+  faithEntryPath,
+  faithStreamPath,
+  professionalWriting,
+  professionalWritingToSupply,
+  publishedFaithEntries,
+} from '../../lib/writing';
+---
+
+<BaseLayout
+  title="Writing — Dr. Wei-Hung Pan"
+  description="Writing on clinical data engineering, statistics and research practice, indexed here and published off this site."
+>
+  <h1>Writing</h1>
+
+  <p>
+    A few pieces a year, on clinical data, statistics and how research actually gets done. They are
+    published on <a href={PROFESSIONAL_PLATFORM.url}>{PROFESSIONAL_PLATFORM.name}</a>, which is
+    where they already have their readers, so this page indexes them and the links lead there rather
+    than to a copy kept here.
+  </p>
+
+  {
+    professionalWriting.length > 0 ? (
+      <ul>
+        {professionalWriting.map((piece) => (
+          <li>
+            <a href={piece.url}>{piece.title}</a> ({piece.year})
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p>
+        <Fact value={professionalWritingToSupply} />
+      </p>
+    )
+  }
+
+  {
+    /*
+     * The faith half, which renders itself away with the stream. Nothing here
+     * is written down twice: the section exists exactly while the collection
+     * has a published entry, which is the same condition that builds the
+     * stream and puts its navigation item in the header.
+     */
+    publishedFaithEntries.length > 0 && (
+      <section aria-labelledby="faith">
+        <h2 id="faith">Faith and life</h2>
+
+        <p>
+          I also write about faith and life. Those pieces are hosted here rather than beside the
+          professional ones, and this is the door to them:{' '}
+          <a href={faithStreamPath}>faith and life</a>.
+        </p>
+
+        <ul>
+          {publishedFaithEntries.map((entry) => (
+            <li>
+              <a href={faithEntryPath(entry)}>{entry.data.title}</a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+</BaseLayout>

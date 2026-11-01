@@ -1,0 +1,88 @@
+---
+/**
+ * The faith stream: its index at `/writing/faith/`, and one page per entry.
+ *
+ * Both live in one route file because both are the same conditional: this file
+ * builds nothing at all while no faith entry is published, so the site never
+ * shows an empty section and the navigation has no route to link. The rest
+ * parameter exists for exactly that — `slug: undefined` is the stream index,
+ * and returning no paths is how the stream declines to exist.
+ *
+ * Publishing an entry edits nothing here. `getStaticPaths` reads the
+ * collection, so a new markdown file becomes a page, a line on the index and a
+ * navigation item on its own.
+ */
+import { render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import {
+  type WritingEntry,
+  faithEntryPath,
+  faithStreamPath,
+  publishedFaithEntries,
+} from '../../../lib/writing';
+
+export function getStaticPaths() {
+  if (publishedFaithEntries.length === 0) return [];
+
+  return [
+    { params: { slug: undefined }, props: { entry: undefined } },
+    ...publishedFaithEntries.map((entry) => ({ params: { slug: entry.id }, props: { entry } })),
+  ];
+}
+
+interface Props {
+  /** The entry to render, or `undefined` for the stream index. */
+  entry: WritingEntry | undefined;
+}
+
+const { entry } = Astro.props;
+
+/** The entry's prose, rendered from its markdown. */
+const Body = entry ? (await render(entry)).Content : undefined;
+
+const machineDate = (entry: WritingEntry): string => entry.data.date.toISOString().slice(0, 10);
+
+const readableDate = (entry: WritingEntry): string =>
+  entry.data.date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+
+const STREAM_TITLE = 'Faith and life';
+const STREAM_DESCRIPTION =
+  'A separate stream of writing on faith and life, kept apart from the professional writing on purpose.';
+---
+
+{
+  entry && Body ? (
+    <BaseLayout title={`${entry.data.title} — ${STREAM_TITLE}`} description={entry.data.description}>
+      <article>
+        <h1>{entry.data.title}</h1>
+        <p class="text-muted">
+          <time datetime={machineDate(entry)}>{readableDate(entry)}</time>
+        </p>
+        <Body />
+      </article>
+
+      <p><a href={faithStreamPath}>All of {STREAM_TITLE.toLowerCase()}</a></p>
+    </BaseLayout>
+  ) : (
+    <BaseLayout title={`${STREAM_TITLE} — Dr. Wei-Hung Pan`} description={STREAM_DESCRIPTION}>
+      <h1>{STREAM_TITLE}</h1>
+
+      <p>
+        This is the other half of what I write, and it is kept separate from the professional half
+        deliberately: a clearly labelled door, not something a Client meets while deciding whether
+        to work with me.
+      </p>
+
+      <ul>
+        {publishedFaithEntries.map((published) => (
+          <li>
+            <a href={faithEntryPath(published)}>{published.data.title}</a>{' '}
+            <time datetime={machineDate(published)}>{readableDate(published)}</time>
+            <br />
+            {published.data.description}
+          </li>
+        ))}
+      </ul>
+    </BaseLayout>
+  )
+}

@@ -1,0 +1,44 @@
+---
+/**
+ * The page a sent message lands on.
+ *
+ * It exists so that the form needs no JavaScript: the host function answers
+ * the post with a 303 to this static page, which the browser can reload or
+ * bookmark without resubmitting. `sentPath()` in `src/lib/contact.ts` is the
+ * single place that path is written, and the suite checks this page was built
+ * at it.
+ *
+ * It repeats the response time and the direct address rather than only saying
+ * thank you. A visitor who has just handed over a message is at the exact
+ * moment when an unanswered "and now?" turns into doubt that it arrived.
+ */
+import Fact from '../../components/Fact.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { type Fact as LegalFact, isUnknown, operator } from '../../lib/legal';
+
+const email: LegalFact = operator.email;
+---
+
+<BaseLayout
+  title="Message sent — Dr. Wei-Hung Pan"
+  description="Your message has been sent. A reply normally follows within three working days."
+>
+  <h1>Your message has been sent</h1>
+
+  <p>
+    Thank you — it is in my mailbox. I answer within three working days, and a teaching week can
+    stretch that to about a week.
+  </p>
+
+  <p>
+    If nothing has arrived after a week, assume the message went astray rather than that it was
+    ignored. Write to {
+      isUnknown(email) ? <Fact value={email} /> : <a href={`mailto:${email}`}>{email}</a>
+    } and it will reach me directly.
+  </p>
+
+  <p>
+    Nothing was stored on this site: what you wrote was handed straight to the mail service and
+    passed on. <a href="/contact/">Back to the contact page</a>.
+  </p>
+</BaseLayout>
