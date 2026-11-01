@@ -1,0 +1,94 @@
+---
+/**
+ * The Traditional Chinese about page.
+ *
+ * Written for a Taiwanese Researcher rather than translated from the English
+ * page: it opens with 國家衛生研究院, which is how his history is placed inside
+ * Taiwan's research establishment, and it says plainly that the PDF CV is in
+ * English so nobody downloads it expecting otherwise.
+ *
+ * The timeline, the publication list and the awards are the same three
+ * components the English page uses, reading the same records, so the two
+ * pages cannot disagree about what he has done.
+ */
+import AwardList from '../../components/AwardList.astro';
+import CareerTimeline from '../../components/CareerTimeline.astro';
+import Fact from '../../components/Fact.astro';
+import PublicationList from '../../components/PublicationList.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { routeExists } from '../../lib/i18n';
+import { unknown } from '../../lib/legal';
+import { currentEmployer, organisationOf } from '../../lib/records';
+
+const employer = await currentEmployer();
+
+/**
+ * The faith stream, when it has been built. Traditional Chinese exists for
+ * five pages and the faith stream is not one of them, so this link leads to
+ * the English stream — which is better than a paragraph that mentions
+ * writing the reader cannot reach.
+ */
+const faithStream = ['/writing/faith/', '/writing/'].find(routeExists);
+---
+
+<BaseLayout
+  title="關於潘威宏博士 — 學經歷、期刊論文與獲獎"
+  description="自 2012 年起的學經歷年表、完整期刊論文清單、獲獎紀錄，以及兩頁式 PDF 履歷。"
+>
+  <h1>關於我</h1>
+
+  <p>
+    我自 2012 年起處理健康與臨床資料，起點是臺灣的國家衛生研究院（NHRI），我的博士研究與生物資訊博士學位也在那裡完成。之後我進入製藥產業，在早期臨床開發領域工作十年，既建立研究所需的資料基礎建設，也負責其上的統計分析，目前任職於<Fact
+      value={employer ? organisationOf(employer, true) : unknown("current employer's name")}
+    />。
+  </p>
+
+  <p>
+    自 2022 年起我在德國的大學授課，現為 University of Europe for Applied Sciences
+    數學與統計兼任講師，並在 Berliner Hochschule für Technik
+    授課。我為研究團隊與企業講授統計、機器學習與人工智慧，可用中文、英文或德文進行。
+  </p>
+
+  <figure>
+    <Fact
+      value={unknown(
+        'headshot photograph — a plain professional portrait, with publication consent on file',
+      )}
+    />
+    <figcaption>潘威宏博士</figcaption>
+  </figure>
+
+  <p>
+    <a href="/cv.pdf" download>下載兩頁式 PDF 履歷</a>（英文）。修訂日期寫在文件內頁，因此這個連結每次更新後都不會改變。
+  </p>
+
+  <section id="career" aria-labelledby="career-heading">
+    <h2 id="career-heading">學經歷年表</h2>
+    <CareerTimeline locale="zh" />
+  </section>
+
+  <section id="publications" aria-labelledby="publications-heading">
+    <h2 id="publications-heading">期刊論文</h2>
+    <PublicationList />
+  </section>
+
+  <section id="awards" aria-labelledby="awards-heading">
+    <h2 id="awards-heading">獲獎紀錄</h2>
+    <AwardList locale="zh" />
+  </section>
+
+  <section aria-labelledby="faith-heading">
+    <h2 id="faith-heading">信仰</h2>
+    <p>
+      我是基督徒，這影響我怎麼工作，也影響我怎麼對待一起工作的人。這不是我販售的內容：服務頁面上不會提到，合作過的人也不需要聽我談這件事。我把它寫在另一個獨立的專欄{
+        faithStream ? (
+          <>
+            ，<a href={faithStream}>信仰文章在這裡</a>（英文），想看的人看得到，不想看的人也完全不會碰到
+          </>
+        ) : (
+          '，寫成之後會發表在這裡，不想看的人也完全不會碰到'
+        )
+      }。
+    </p>
+  </section>
+</BaseLayout>

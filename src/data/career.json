@@ -1,0 +1,34 @@
+[
+  {
+    "id": "nhri",
+    "start": 2012,
+    "end": { "unknown": "year the doctoral work at NHRI ended" },
+    "organisation": "National Health Research Institutes (NHRI)",
+    "localName": "國家衛生研究院（NHRI）",
+    "role": {
+      "en": "Doctoral research in bioinformatics, and the PhD itself: health and clinical data from 2012 onwards.",
+      "zh": "生物資訊博士研究，並於此取得博士學位；自 2012 年起處理健康與臨床資料。"
+    }
+  },
+  {
+    "id": "pharma",
+    "start": { "unknown": "year the current post in early-phase drug development began" },
+    "end": "present",
+    "organisation": { "unknown": "current employer's name, as it should appear in public" },
+    "employer": true,
+    "role": {
+      "en": "Data science and statistics in pharmaceutical early-phase drug development.",
+      "zh": "在製藥早期臨床開發領域負責資料科學與統計工作。"
+    }
+  },
+  {
+    "id": "ue-germany",
+    "start": 2022,
+    "end": "present",
+    "organisation": "University of Europe for Applied Sciences",
+    "role": {
+      "en": "Adjunct Lecturer in Mathematics & Statistics; teaching at German universities since 2022.",
+      "zh": "數學與統計兼任講師；自 2022 年起在德國的大學授課。"
+    }
+  }
+]

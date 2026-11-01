@@ -1,0 +1,51 @@
+---
+/**
+ * The dated career timeline, rendered from the one career record.
+ *
+ * Both about pages use this component, so the two languages always show the
+ * same positions in the same order. Only the role sentence and the word for
+ * an open end differ; the years and the institutions are the same strings in
+ * both, because they are the same data.
+ */
+import type { Fact as LegalFact } from '../lib/legal';
+import { type Locale } from '../lib/i18n';
+import { type RecordedYear, careerTimeline, isKnownYear, organisationOf } from '../lib/records';
+import Fact from './Fact.astro';
+
+interface Props {
+  /** The language this page is written in. */
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const chinese = locale === 'zh';
+
+/** The word for a position that has not ended. */
+const present: Record<Locale, string> = { en: 'present', zh: '至今' };
+
+/**
+ * A year as something renderable: the year itself, the word for an open end,
+ * or the unsupplied fact, which `Fact` marks visibly rather than leaving a
+ * blank that reads like an answer.
+ */
+function shown(value: RecordedYear | 'present'): LegalFact {
+  if (value === 'present') return present[locale];
+  return isKnownYear(value) ? String(value) : value;
+}
+
+const positions = await careerTimeline();
+---
+
+<ol class="space-y-6">
+  {
+    positions.map((position) => (
+      <li>
+        <p class="font-semibold">
+          <Fact value={shown(position.start)} /> – <Fact value={shown(position.end)} />
+        </p>
+        <p><Fact value={organisationOf(position, chinese)} /></p>
+        <p>{position.role[locale]}</p>
+      </li>
+    ))
+  }
+</ol>
