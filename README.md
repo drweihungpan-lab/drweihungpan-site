@@ -1,30 +1,48 @@
 # drweihungpan-site
 
-Personal website for Dr. Wei-Hung Pan: professional identity, two paid service
-lines, and a public body of writing.
+Personal website for Dr. Wei-Hung Pan, in English and Traditional Chinese: a
+calling card of four pages — about me, professional life, personal life,
+contact.
 
-Implementation has begun. The lead offer is **Engineering and Analysis** for
-clinical research groups: building the data infrastructure a study needs and
-running its statistics.
+**Nothing on this site is for sale.** It describes the work he does — building
+the data infrastructure a clinical study needs and running its statistics — and
+states his availability once, in prose, as an invitation. It was first built as
+a site of nine navigation items organised around paid offers; the restructure
+away from that is in progress.
+[Issue #13](https://github.com/drweihungpan-lab/drweihungpan-site/issues/13)
+is the shape of it, and
+[ADR-0003](docs/adr/0003-a-four-page-calling-card.md) is why.
 
 ## Start here
 
-- [`GLOSSARY.md`](GLOSSARY.md): the canonical vocabulary — Researcher, Client,
-  Engineering, Analysis, Coaching, Workshop, Course. Read this first.
+- [`GLOSSARY.md`](GLOSSARY.md): the canonical vocabulary — Researcher,
+  Engineering, Analysis, Coaching, Workshop, Course, and the Separation. Read
+  this first.
+- [v2 spec](https://github.com/drweihungpan-lab/drweihungpan-site/issues/13)
+  (issue #13): **the current requirement** — a four-page calling card, not a
+  sales site. Where anything else in this repository disagrees with it, it
+  wins.
 - [v1 build spec](https://github.com/drweihungpan-lab/drweihungpan-site/issues/1)
-  (issue #1): the current requirement. **Where it disagrees with the design
-  file, the spec wins.**
+  (issue #1): **superseded by #13.** Kept for the history of what was built
+  first.
 - [Design spec](docs/superpowers/specs/2026-10-31-personal-website-design.md):
-  purpose, audience, offers, information architecture, technical design, legal
-  requirements, and the decisions behind each. **Partly superseded** by the v1
-  spec — sections 2 through 6, 8, 10 and 11 carry a notice saying what overrode
-  them.
+  purpose, audience, technical design, legal requirements, and the reasoning
+  behind each. **Partly superseded** — first by the v1 spec, then by #13. Its
+  technical design (§7), legal and compliance (§8) and publication blocker
+  (§12) still hold; its positioning, offers, information architecture, page
+  specifications and decisions (§§2–6 and §11) do not.
 - [`docs/adr/`](docs/adr/): decisions that are hard to reverse and would
   otherwise puzzle a future reader.
   - [ADR-0001](docs/adr/0001-engineering-and-analysis-as-lead-offer.md) —
-    Engineering and Analysis as the lead offer.
+    Engineering and Analysis as the lead offer. **Amended by ADR-0003**: the
+    judgment that the combination is the differentiator still binds; the offer
+    pages it prescribed do not.
   - [ADR-0002](docs/adr/0002-credit-policy-for-analysis.md) — the credit policy
-    for Analysis.
+    for Analysis. **Superseded by ADR-0003**, which withdraws it: publication
+    work is no longer offered, so the policy has nothing left to govern.
+  - [ADR-0003](docs/adr/0003-a-four-page-calling-card.md) — a four-page calling
+    card, not a sales site. The positioning and information architecture the
+    site is built to now.
 
 ## Developing
 
@@ -55,12 +73,15 @@ links all come with the layout.
 | `components/Fact.astro` | `value` | A legal fact from `src/lib/legal.ts`, or a visibly marked placeholder. |
 
 **The navigation is not a list of links anyone maintains.** The information
-architecture is declared once in `src/lib/navigation.ts` and every item is
-filtered through `routeExists` before it renders. Adding `src/pages/about.astro`
-puts *About* in the English navigation; not adding `src/pages/zh/about.astro`
-keeps it out of the Chinese one. Nothing links a page that was not built, which
-is also why the Chinese navigation shows only the five pages Traditional Chinese
-is written for.
+architecture is declared once in `src/lib/navigation.ts` — four items, *About*,
+*Professional*, *Personal* and *Contact*, with a label for each language — and
+every item is filtered through `routeExists` before it renders. Adding
+`src/pages/professional.astro` puts *Professional* in the English navigation;
+not adding `src/pages/zh/professional.astro` keeps it out of the Chinese one.
+Nothing can link a page that was not built, so the build cannot ship a broken
+internal link. Both languages resolve to the same four items, because every
+page has a counterpart; the legal links are the exception, and their Chinese
+labels name the language a visitor is about to get.
 
 **The language switcher renders if and only if a counterpart page exists**, from
 `counterpart()` in `src/lib/i18n.ts`. The layout resolves it once and hands it
@@ -80,16 +101,19 @@ edit that both pages pick up. A new processor anywhere on the site needs a row
 in the privacy notice's processor table stating its legal basis, or the suite
 fails.
 
-## The writing section
+## The faith stream
 
-Professional writing stays on the platform that already publishes it and
-`/writing/` links out to it. Faith writing is hosted here as markdown, under
-`/writing/faith/`. The split is a necessity rather than tidiness: that platform
-has one profile and one feed, so a faith piece published there would land in
-front of every Client who followed the professional writing, which is exactly
-the separation of professional and faith content the design built. No service
-page may link into the faith stream or carry its content, and the suite asserts
-that over every service page the build emits.
+Faith pieces are hosted here as markdown, each with a permalink of its own, and
+they are reached from Personal life. The navigation item is labelled *Personal*
+rather than *Faith*: a clearly labelled door, not a conviction announced in the
+header of every page. **No page outside the personal pages carries faith
+content or links into the stream** — that is the Separation in
+[`GLOSSARY.md`](GLOSSARY.md), and the suite asserts it over every route the
+build emits.
+
+Professional writing is not hosted here and is no longer linked from the site;
+the stream's routes move with the restructure in
+[#13](https://github.com/drweihungpan-lab/drweihungpan-site/issues/13).
 
 **Publishing a faith entry is one markdown file.** Add it to
 `src/content/writing/` with this frontmatter and write the piece:
@@ -97,39 +121,31 @@ that over every service page the build emits.
 | Field | |
 | --- | --- |
 | `title` | The heading, the browser-tab title and the link text. |
-| `description` | One sentence, for search results and the stream index. |
+| `description` | One sentence, for search results and the list of pieces. |
 | `date` | Publication date. Orders the stream and is printed on the entry. |
 | `lang` | `'en'` or `'zh'`. |
 | `stream` | `'faith'` — the only stream hosted on this site. |
 | `translationOf` | Optional: the `id` of the counterpart entry in the other language. |
 | `draft` | Optional, defaults to `false`. |
 
-**No page is edited and nothing is registered.** The file becomes a page at
-`/writing/faith/<file-name>/`, a line on the stream index and on the writing
-index, and — if it is the first one — the **Faith** item in the main
-navigation. The schema is strict, so a missing field, an unparseable date or a
-misspelled key **fails the build** rather than reaching a reader as a blank
-title. A `draft: true` entry is never published or linked. The faith stream is
-English-only, by the spec's five-page limit on Traditional Chinese, so a
-`lang: 'zh'` entry waits for a Chinese stream instead of shipping Chinese prose
-on a page that declares itself English.
+**No page is edited and nothing is registered.** The file becomes a page of its
+own and a dated line on the list of pieces, newest first. The schema is strict,
+so a missing field, an unparseable date or a misspelled key **fails the build**
+rather than reaching a reader as a blank title. A `draft: true` entry is never
+published or linked. The stream is English-only, so a `lang: 'zh'` entry waits
+for a Chinese stream instead of shipping Chinese prose on a page that declares
+itself English.
 
-**The faith navigation item exists only while an entry is published**, so the
-site never shows an empty section. There is no special case for it anywhere:
-`src/lib/writing.ts` derives the faith routes from the collection, and
-`src/lib/i18n.ts` folds them into the same route set the navigation already
-filters against. Both branches are asserted against built HTML — the published
-one in the suite's own build, the empty one in
+**A piece has a route only once it is published.** There is no special case for
+it anywhere: `src/lib/writing.ts` derives the stream's routes from the
+collection, and `src/lib/i18n.ts` folds them into the same route set the
+navigation already filters against. Both branches are asserted against built
+HTML — the published one in the suite's own build, the empty one in
 `tests/writing-publishing.test.ts`, which builds the site again with
 `WRITING_CONTENT_DIR` pointing at a temporary directory of entries.
 
-Two things here are waiting for the owner. `src/content/writing/sample-entry.md`
-is **sample content**: replacing or deleting it is the first real entry.
-`professionalWriting` in `src/lib/writing.ts` is **empty**, because his Medium
-profile and the titles and URLs of his pieces are not in this repository and
-were not invented — the index says what it is waiting for, through the same
-marked-placeholder convention as the legal pages. Listing a piece is one object
-in that array; no page is edited for that either.
+`src/content/writing/sample-entry.md` is **sample content**: replacing or
+deleting it is the first real entry.
 
 ## Traditional Chinese copy
 
@@ -261,8 +277,9 @@ suite rather than showing a visitor tofu.
 
 | Stage | State |
 | --- | --- |
-| Design spec | Approved, partly superseded by the v1 spec (issue #1) |
-| v1 build spec | Approved — issue #1, broken into tickets |
-| Decision records | ADR-0001 and ADR-0002 recorded |
-| Implementation | In progress |
+| Design spec | Approved, partly superseded — by the v1 spec, then by the v2 spec |
+| v1 build spec | Superseded by the v2 spec |
+| v2 spec | Approved — issue #13, broken into tickets |
+| Decision records | ADR-0001 amended, ADR-0002 withdrawn, ADR-0003 recorded |
+| Implementation | In progress — restructuring to the four pages of #13 |
 | Published | Blocked — see design §12 (employment contract) |

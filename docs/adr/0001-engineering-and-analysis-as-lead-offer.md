@@ -1,9 +1,40 @@
 # ADR-0001: Engineering and Analysis as the lead offer
 
-- **Status:** accepted
+- **Status:** accepted in part — amended by
+  [ADR-0003](0003-a-four-page-calling-card.md)
 - **Date:** 2026-10-31
+- **Amended:** 2026-11-02
 - **Supersedes:** the "Lead offer" row in §11 of
   `docs/superpowers/specs/2026-10-31-personal-website-design.md`
+
+## Amendment, 2026-11-02 — which half of this still binds
+
+[ADR-0003](0003-a-four-page-calling-card.md) replaced the site this record
+designed with a four-page calling card. Half of what follows survives that
+change and half of it does not, so read the rest of this file knowing which is
+which.
+
+**What survives, and still binds.** The judgment in *Context*: neither building
+the data layer nor analysing it is rare on its own, and the thing a Researcher
+cannot easily find is one person who will do both and then defend the methods
+that come out of it. That remains the stated differentiator, and it still drives
+the Professional life copy, which describes Engineering and Analysis together
+for exactly this reason. The rejected alternative — a narrower position selling
+publication statistics alone — stays rejected, and more firmly: that work is now
+withdrawn outright rather than demoted.
+
+**What does not.** Everything this record prescribes about *pages*. There are no
+offer pages, no homepage offer cards, no consulting offer listed-but-unpromoted
+and no Workshop card. Engineering's four named deliverables are no longer four
+sections of a page: each kind of work is a heading and one or two sentences on
+one Professional life page, and the consulting scope boundary survives as a
+single sentence. The *Consequences* below are consequences of that page
+structure, so they describe a site that no longer exists.
+
+**And the publication-statistics package inside Analysis is gone.** This record
+demoted it in answer to the owner saying publication "is not what he cares
+about"; ADR-0003 removes it, which withdraws the work
+[ADR-0002](0002-credit-policy-for-analysis.md) existed to govern.
 
 ## Context
 
