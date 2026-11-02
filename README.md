@@ -131,6 +131,45 @@ were not invented — the index says what it is waiting for, through the same
 marked-placeholder convention as the legal pages. Listing a piece is one object
 in that array; no page is edited for that either.
 
+## Traditional Chinese copy
+
+**No page holds Chinese prose.** Every Chinese paragraph on the site is an
+entry in `src/data/zh-copy.yaml`, and each entry carries a status:
+
+| Status | What the page renders |
+| --- | --- |
+| `approved` | the paragraph, as the owner wrote it |
+| `draft` | a marked placeholder carrying an English brief |
+
+The prose that was on the Chinese pages was written by an agent, not by the
+owner. The decision recorded on issue #13 is that only his own Chinese reaches
+a visitor, so that prose now sits in the copy file as `draft` — saved,
+versioned and visible to him, with no code path by which it can ship.
+`tests/zh-copy.test.ts` asserts that over every built route.
+
+Writing a paragraph is one file and one word: replace `text:` and change
+`status: draft` to `status: approved`. **No page is edited.** The file's own
+header is the instructions; `src/collections/zh-copy.ts` is the schema that
+makes an unknown status, an approved paragraph with no text, or an approved
+paragraph that still holds a `{...}` interpolation token a build error.
+
+A page asks for a paragraph by key through `zhProse(key)` in
+`src/lib/zh-copy.ts`, which returns a `Fact` — so it renders through the same
+`src/components/Fact.astro` and the same `unknown()` convention as an
+unsupplied legal fact, and the site-wide rule that no placeholder reaches a
+visitor unmarked covers it already. An unknown key throws rather than
+rendering a blank. **Keys are global, not per page**, so a paragraph keeps its
+key when it moves to another page and an approved paragraph cannot revert to a
+draft by being re-keyed.
+
+The approved branch cannot be observed in a build where nothing is approved,
+so it has a build of its own: `tests/zh-copy-approval.test.ts` builds the site
+again with `ZH_COPY_FILE` pointing at a copy file the test wrote, the same way
+the writing suite uses `WRITING_CONTENT_DIR`.
+
+Headings, page titles and navigation labels are labels rather than paragraphs.
+They are the owner's call too, and are not in this file yet.
+
 ## The contact form
 
 `/contact/` and `/zh/contact/` carry a plain HTML form that posts to

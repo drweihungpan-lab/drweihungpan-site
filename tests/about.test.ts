@@ -57,14 +57,28 @@ describe('the career timeline', () => {
 describe('the faith paragraph', () => {
   const faith = (route: string) => page(route)('h2#faith-heading').parent();
 
-  it.each([
-    ['/about/', 'Christian'],
-    ['/zh/about/', '基督徒'],
-  ])('%s names his faith in a paragraph of its own, from day one', (route, named) => {
-    const paragraph = faith(route).find('p').text().replace(/\s+/g, ' ').trim();
+  it('/about/ names his faith in a paragraph of its own, from day one', () => {
+    const paragraph = faith('/about/').find('p').text().replace(/\s+/g, ' ').trim();
 
-    expect(paragraph).toContain(named);
+    expect(paragraph).toContain('Christian');
     expect(paragraph.length).toBeGreaterThan(80);
+  });
+
+  /**
+   * The Chinese page has the section from day one too, but not the sentence:
+   * the Chinese on this site is the owner's own, and the paragraph that used
+   * to be here was an agent's (#15, and the decision on #13). Until he writes
+   * it, the section carries the marked brief — which is the honest state, and
+   * a visible one, rather than an empty heading. The draft is kept in
+   * `src/data/zh-copy.yaml`, and `tests/zh-copy.test.ts` asserts it ships
+   * nowhere.
+   */
+  it('/zh/about/ keeps the section, with the paragraph marked as his to write', () => {
+    const paragraph = faith('/zh/about/').find('p').text().replace(/\s+/g, ' ').trim();
+
+    expect(paragraph).toContain('TO BE SUPPLIED');
+    expect(paragraph).toMatch(/Christian/);
+    expect(paragraph).not.toMatch(/\p{Script=Han}/u);
   });
 
   /**
@@ -73,8 +87,13 @@ describe('the faith paragraph', () => {
    * ticket, so both branches are real: the rule is stated as "a link into the
    * writing the stream lives in, if there is one", never a hardcoded path
    * that could 404.
+   *
+   * Only the English page is held to carrying that link. Where the link sits
+   * in a sentence is part of writing the sentence, so the Chinese page's link
+   * went into the copy file with the paragraph; what still holds on both is
+   * that a link the section does carry resolves.
    */
-  it.each(['/about/', '/zh/about/'])('%s links into the writing it mentions', (route) => {
+  it.each(['/about/', '/zh/about/'])('%s links only to writing that was built', (route) => {
     const linked = faith(route)
       .find('a[href]')
       .map((_, element) => page(route)(element).attr('href') ?? '')
@@ -83,6 +102,13 @@ describe('the faith paragraph', () => {
     for (const href of linked) {
       expect(routeExists(href)).toBe(true);
     }
+  });
+
+  it('/about/ links into the writing it mentions', () => {
+    const linked = faith('/about/')
+      .find('a[href]')
+      .map((_, element) => page('/about/')(element).attr('href') ?? '')
+      .get();
 
     if (routeExists('/writing/faith/')) {
       expect(linked).toContain('/writing/faith/');
