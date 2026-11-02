@@ -26,14 +26,17 @@
 # The draft text below is kept on purpose, as something to rewrite from.
 # Delete it only once the paragraph is written.
 #
-# `{...}` in a draft marks where the old page dropped a value into the
-# sentence: `{employer}` was the employer's name from `src/data/career.json`,
-# `{email}` the contact address, `{booking}` the booking link, `{cv}` the link
-# to the PDF CV, `{faith-stream}` the link to the faith writing, `{privacy}`
-# the link to the privacy notice. An approved paragraph is rendered exactly as
-# written, so a brace in one is a schema error rather than a `{email}` on the
-# page: write the sentence without the token, and the page keeps rendering the
-# link or the marked fact beside it.
+# `{...}` in a draft marks where the old page dropped something into the
+# sentence, and keeps whatever words were there: `{employer}` was the
+# employer's name from `src/data/career.json`, `{email}` the contact address,
+# and `{cv: ...}`, `{faith-stream: ...}`, `{booking: ...}` and
+# `{privacy: ...}` were links, with the text after the colon as their label.
+# Nothing the old pages said is lost — it is all here, marked as what it was.
+#
+# An approved paragraph is rendered exactly as written, so a brace in one is a
+# schema error rather than a `{email}` on the page: write the sentence without
+# the token, and the page keeps rendering the link or the marked fact beside
+# it.
 #
 # Keys are global, not per page. A paragraph keeps its key when it moves to
 # another page, so an approved paragraph cannot revert to a draft by being
@@ -79,7 +82,7 @@
     carry it.
   length: 1 or 2 sentences
   text: |
-    {cv}（英文）。修訂日期寫在文件內頁，因此這個連結每次更新後都不會改變。
+    {cv: 下載兩頁式 PDF 履歷}（英文）。修訂日期寫在文件內頁，因此這個連結每次更新後都不會改變。
 
 - id: faith-and-work
   status: draft
@@ -90,8 +93,12 @@
     to hear about it. It lives in a stream of its own that a reader chooses to
     open.
   length: about 3 sentences
+  # The old page had a second ending for this paragraph, used while the faith
+  # stream had nothing published: instead of `，{faith-stream}（英文），想看的
+  # 人看得到，不想看的人也完全不會碰到`, it read `，寫成之後會發表在這裡，不想
+  # 看的人也完全不會碰到`. Kept here so that neither version is lost.
   text: |
-    我是基督徒，這影響我怎麼工作，也影響我怎麼對待一起工作的人。這不是我販售的內容：服務頁面上不會提到，合作過的人也不需要聽我談這件事。我把它寫在另一個獨立的專欄，{faith-stream}（英文），想看的人看得到，不想看的人也完全不會碰到。
+    我是基督徒，這影響我怎麼工作，也影響我怎麼對待一起工作的人。這不是我販售的內容：服務頁面上不會提到，合作過的人也不需要聽我談這件事。我把它寫在另一個獨立的專欄，{faith-stream: 信仰文章在這裡}（英文），想看的人看得到，不想看的人也完全不會碰到。
 
 # -------------------------------------------------- Contact (/zh/contact/) --
 
@@ -140,4 +147,4 @@
     he supplies it.
   length: about 3 sentences
   text: |
-    二十分鐘的通話常常比來回三封信有用。{booking}。在你點開那個連結之前，不會有任何資料送到預約服務；點開之後的處理方式，寫在{privacy}裡。
+    二十分鐘的通話常常比來回三封信有用。{booking: 挑一個你方便的時段}。在你點開那個連結之前，不會有任何資料送到預約服務；點開之後的處理方式，寫在{privacy: 隱私權聲明（英文）}裡。
