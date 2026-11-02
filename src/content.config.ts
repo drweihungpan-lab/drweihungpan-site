@@ -12,5 +12,6 @@ import { career } from './collections/career';
 import { publications } from './collections/publications';
 import { teaching } from './collections/teaching';
 import { writing } from './collections/writing';
+import { zhCopy } from './collections/zh-copy';
 
-export const collections = { awards, career, publications, teaching, writing };
+export const collections = { awards, career, publications, teaching, writing, zhCopy };

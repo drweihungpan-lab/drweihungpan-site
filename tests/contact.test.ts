@@ -139,11 +139,29 @@ describe('the contact page', () => {
    * quantity and a unit rather than for the sentence, so the copy can be
    * rewritten freely and only dropping the commitment fails.
    */
-  it.each([
-    ['/contact/', /\b(within|in)\s+(one|two|three|four|five|\d+)\s+(working\s+)?(day|week)s?\b/i],
-    ['/zh/contact/', /[一二三四五六七八九十\d]\s*(個)?\s*(工作日|天|週|周|星期)/],
-  ] as const)('%s states how soon a reply comes', (route, period) => {
-    expect(page(route)('main').text()).toMatch(period);
+  it('/contact/ states how soon a reply comes', () => {
+    expect(page('/contact/')('main').text()).toMatch(
+      /\b(within|in)\s+(one|two|three|four|five|\d+)\s+(working\s+)?(day|week)s?\b/i,
+    );
+  });
+
+  /**
+   * On the Chinese page the sentence is the owner's to write (#15), so the
+   * commitment lives in the brief the page marks rather than in prose an agent
+   * wrote. The commitment itself is still asserted: the brief has to say what
+   * the paragraph must state, or approving a paragraph that quietly drops the
+   * response time would pass unnoticed.
+   */
+  it('/zh/contact/ marks the reply time as his to write, and still states it', () => {
+    const marked = page('/zh/contact/')('main mark')
+      .map((_, element) => page('/zh/contact/')(element).text())
+      .get()
+      .filter((text) => text.includes('"reply-time"'));
+
+    expect(marked).toHaveLength(1);
+    expect(marked[0]).toMatch(
+      /\b(one|two|three|four|five|\d+)\s+(working\s+)?(day|week)s?\b/i,
+    );
   });
 
   /**

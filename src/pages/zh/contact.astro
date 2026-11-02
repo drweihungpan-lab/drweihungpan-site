@@ -2,19 +2,24 @@
 /**
  * The Traditional Chinese contact page.
  *
- * Written natively, not translated. The English page explains the data problem
- * first; this one opens by saying that Mandarin is fine, because for a
- * Taiwanese Researcher the first question is not what the service is but
- * whether the exchange can happen in their own language. The response-time
- * paragraph is also franker about the time difference, which an English reader
- * does not have.
+ * Its prose is not written here. Every paragraph comes from
+ * `src/data/zh-copy.yaml` through `zhProse`, which renders the owner's own
+ * approved Chinese or, until he has written it, a marked placeholder carrying
+ * an English brief — the decision recorded on issue #13. The prose that used
+ * to be in this file was an agent's, so it now sits in that file as a draft he
+ * can rewrite from, and no sentence of it ships.
  *
  * Same form, same host function, same marked placeholders as the English page.
+ * The email address and the booking link are rendered beside their paragraphs
+ * rather than inside them, because they are facts from `src/lib/legal.ts`
+ * rather than language: an unwritten paragraph must not be able to take the
+ * two ways of reaching him off the page with it.
  */
 import ContactForm from '../../components/ContactForm.astro';
 import Fact from '../../components/Fact.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { type Fact as LegalFact, isUnknown, operator } from '../../lib/legal';
+import { zhProse } from '../../lib/zh-copy';
 
 const email: LegalFact = operator.email;
 const booking: LegalFact = operator.bookingUrl;
@@ -26,9 +31,7 @@ const booking: LegalFact = operator.bookingUrl;
 >
   <h1>聯絡</h1>
 
-  <p>
-    用中文寫就好。請說明你的研究在做什麼，以及資料卡在哪一步——一兩段就夠。寫得粗略沒關係，我寧願看到真實的狀況，而不是整理過的摘要。
-  </p>
+  <p><Fact value={zhProse('write-in-mandarin')} /></p>
 
   <h2>留訊息給我</h2>
 
@@ -36,25 +39,19 @@ const booking: LegalFact = operator.bookingUrl;
 
   <h2>多久會收到回覆</h2>
 
-  <p>
-    我在三個工作日內回覆。我在德國，和臺灣有六到七小時的時差，所以你晚上寄出的信通常是臺灣的隔天早上才回。遇到授課週會慢一些，最多約一週。如果超過一週還沒有消息，那是訊息沒有送到，不是我不想回：請再寄一次，或直接寄到下面的信箱。
-  </p>
+  <p><Fact value={zhProse('reply-time')} /></p>
 
   <h2>直接寄信給我</h2>
 
   <p>
-    不想在網頁上填表單也完全沒問題，很多人不想。寄到 {
-      isUnknown(email) ? <Fact value={email} /> : <a href={`mailto:${email}`}>{email}</a>
-    } 會進到同一個信箱，回覆的人也是同一個。在這個網站上，你不需要填任何表單才能聯絡我。
+    <Fact value={zhProse('email-instead-of-the-form')} />
+    {isUnknown(email) ? <Fact value={email} /> : <a href={`mailto:${email}`}>{email}</a>}
   </p>
 
   <h2>約一次短通話</h2>
 
   <p>
-    二十分鐘的通話常常比來回三封信有用。{
-      isUnknown(booking) ? <Fact value={booking} /> : <a href={booking}>挑一個你方便的時段</a>
-    }。在你點開那個連結之前，不會有任何資料送到預約服務；點開之後的處理方式，寫在<a
-      href="/privacy/">隱私權聲明（英文）</a
-    >裡。
+    <Fact value={zhProse('a-short-call')} />
+    {isUnknown(booking) ? <Fact value={booking} /> : <a href={booking}>{booking}</a>}
   </p>
 </BaseLayout>

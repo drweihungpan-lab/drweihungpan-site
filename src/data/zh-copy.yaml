@@ -1,0 +1,150 @@
+# Every Traditional Chinese paragraph on this site, in one file.
+#
+# The prose that was on the Chinese pages was not written by Wei-Hung. It was
+# written by an agent and read like it. The decision recorded on issue #13 is
+# that only his own Chinese reaches a visitor — so no page holds Chinese prose
+# any more. Each paragraph is an entry here, and each entry carries a status.
+#
+#   approved  — his own words. The page renders them as copy.
+#   draft     — anything else, including everything below. The page renders a
+#               marked placeholder carrying the brief instead, and the draft
+#               text never appears in a built page. tests/zh-copy.test.ts
+#               asserts that over every route.
+#
+# So a draft is saved, versioned and visible to him, and cannot ship by
+# accident.
+#
+# WRITING A PARAGRAPH (the whole job — no page to edit):
+#   1. Find the entry by its `id`. `brief` says what the paragraph has to
+#      cover; `length` says roughly how long it should be.
+#   2. Replace `text:` with your own Chinese. Keep the `|` and the indentation.
+#   3. Change `status: draft` to `status: approved`.
+#   4. `npm run verify`. If you used a character the subset font does not
+#      carry, the font test says so — run `npm run font:subset` and commit the
+#      font with the copy.
+#
+# The draft text below is kept on purpose, as something to rewrite from.
+# Delete it only once the paragraph is written.
+#
+# `{...}` in a draft marks where the old page dropped something into the
+# sentence, and keeps whatever words were there: `{employer}` was the
+# employer's name from `src/data/career.json`, `{email}` the contact address,
+# and `{cv: ...}`, `{faith-stream: ...}`, `{booking: ...}` and
+# `{privacy: ...}` were links, with the text after the colon as their label.
+# Nothing the old pages said is lost — it is all here, marked as what it was.
+#
+# An approved paragraph is rendered exactly as written, so a brace in one is a
+# schema error rather than a `{email}` on the page: write the sentence without
+# the token, and the page keeps rendering the link or the marked fact beside
+# it.
+#
+# Keys are global, not per page. A paragraph keeps its key when it moves to
+# another page, so an approved paragraph cannot revert to a draft by being
+# re-keyed. The groupings below are a reading convenience, nothing more.
+#
+# Headings, page titles and navigation labels are labels rather than
+# paragraphs, and are his call separately. They are not in this file.
+
+# ------------------------------------------------- About me (/zh/about/) ----
+
+- id: bio-since-2012
+  status: draft
+  brief: >-
+    Who he is and what he has worked on since 2012, written for a Taiwanese
+    Researcher: NHRI, the doctorate in bioinformatics, then a decade in
+    early-phase drug development, building the data infrastructure a study
+    needs and running the statistics on it. The current employer's name is
+    rendered from the career record and already appears in the timeline
+    further down the page, so this paragraph does not have to repeat it.
+  length: about 3 sentences
+  text: |
+    我自 2012 年起處理健康與臨床資料，起點是臺灣的國家衛生研究院（NHRI），我的博士研究與生物資訊博士學位也在那裡完成。之後我進入製藥產業，在早期臨床開發領域工作十年，既建立研究所需的資料基礎建設，也負責其上的統計分析，目前任職於{employer}。
+
+- id: teaching-in-germany
+  status: draft
+  brief: >-
+    Where he teaches and in which languages: lecturing at German universities
+    since 2022, currently Adjunct Lecturer in Mathematics and Statistics at
+    the University of Europe for Applied Sciences and teaching at Berliner
+    Hochschule fuer Technik, on statistics, machine learning and AI, in
+    Mandarin, English or German.
+  length: about 2 sentences
+  text: |
+    自 2022 年起我在德國的大學授課，現為 University of Europe for Applied Sciences 數學與統計兼任講師，並在 Berliner Hochschule für Technik 授課。我為研究團隊與企業講授統計、機器學習與人工智慧，可用中文、英文或德文進行。
+
+- id: cv-download
+  status: draft
+  brief: >-
+    One sentence pointing at the two-page PDF CV, saying plainly that it is in
+    English so nobody downloads it expecting otherwise, and that its revision
+    date is inside the document so the link never changes. The page renders
+    the link itself beside this paragraph, so the sentence does not have to
+    carry it.
+  length: 1 or 2 sentences
+  text: |
+    {cv: 下載兩頁式 PDF 履歷}（英文）。修訂日期寫在文件內頁，因此這個連結每次更新後都不會改變。
+
+- id: faith-and-work
+  status: draft
+  brief: >-
+    That he is a Christian, how it bears on how he works and how he treats the
+    people he works with, and that it is not something he sells: it is not
+    mentioned where the work is described, and nobody who works with him has
+    to hear about it. It lives in a stream of its own that a reader chooses to
+    open.
+  length: about 3 sentences
+  # The old page had a second ending for this paragraph, used while the faith
+  # stream had nothing published: instead of `，{faith-stream}（英文），想看的
+  # 人看得到，不想看的人也完全不會碰到`, it read `，寫成之後會發表在這裡，不想
+  # 看的人也完全不會碰到`. Kept here so that neither version is lost.
+  text: |
+    我是基督徒，這影響我怎麼工作，也影響我怎麼對待一起工作的人。這不是我販售的內容：服務頁面上不會提到，合作過的人也不需要聽我談這件事。我把它寫在另一個獨立的專欄，{faith-stream: 信仰文章在這裡}（英文），想看的人看得到，不想看的人也完全不會碰到。
+
+# -------------------------------------------------- Contact (/zh/contact/) --
+
+- id: write-in-mandarin
+  status: draft
+  brief: >-
+    The opening invitation: write in Mandarin, say what the study is about and
+    where the data is stuck, a paragraph or two is enough, and a rough
+    description is more use than a tidied-up summary.
+  length: about 3 sentences
+  text: |
+    用中文寫就好。請說明你的研究在做什麼，以及資料卡在哪一步——一兩段就夠。寫得粗略沒關係，我寧願看到真實的狀況，而不是整理過的摘要。
+
+- id: reply-time
+  status: draft
+  brief: >-
+    How soon a reply comes. It must state a bounded period — three working
+    days — because an unstated response time is what makes silence read as
+    rejection. The old draft also explained the six-to-seven-hour difference
+    from Taiwan, that a teaching week can stretch it to about a week, and that
+    nothing after a week means the message did not arrive rather than that it
+    was ignored.
+  length: about 4 sentences
+  text: |
+    我在三個工作日內回覆。我在德國，和臺灣有六到七小時的時差，所以你晚上寄出的信通常是臺灣的隔天早上才回。遇到授課週會慢一些，最多約一週。如果超過一週還沒有消息，那是訊息沒有送到，不是我不想回：請再寄一次，或直接寄到下面的信箱。
+
+- id: email-instead-of-the-form
+  status: draft
+  brief: >-
+    That not wanting to fill in a web form is fine and common, that the
+    address reaches the same inbox and the same person as the form does, and
+    that nothing on this site requires a form to make contact. The address
+    itself is rendered beside this paragraph, marked as unsupplied until he
+    supplies it, so the sentence does not have to carry it.
+  length: about 3 sentences
+  text: |
+    不想在網頁上填表單也完全沒問題，很多人不想。寄到 {email} 會進到同一個信箱，回覆的人也是同一個。在這個網站上，你不需要填任何表單才能聯絡我。
+
+- id: a-short-call
+  status: draft
+  brief: >-
+    That twenty minutes on a call is often worth more than three emails back
+    and forth, and that no data reaches the booking service until the reader
+    opens the link — what happens after that is in the privacy notice. The
+    booking link is rendered beside this paragraph, marked as unsupplied until
+    he supplies it.
+  length: about 3 sentences
+  text: |
+    二十分鐘的通話常常比來回三封信有用。{booking: 挑一個你方便的時段}。在你點開那個連結之前，不會有任何資料送到預約服務；點開之後的處理方式，寫在{privacy: 隱私權聲明（英文）}裡。

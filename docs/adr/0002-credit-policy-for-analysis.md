@@ -1,9 +1,30 @@
 # ADR-0002: The credit policy for Analysis
 
-- **Status:** accepted
+- **Status:** superseded by [ADR-0003](0003-a-four-page-calling-card.md) — the
+  credit policy is **withdrawn**
 - **Date:** 2026-10-31
+- **Superseded:** 2026-11-02
 - **Supersedes:** the "Authorship and research-ethics policy" in §3 of
   `docs/superpowers/specs/2026-10-31-personal-website-design.md`
+
+## Withdrawn, 2026-11-02
+
+This policy is **withdrawn, not merely unpublished**, because the work it
+governed is no longer offered.
+[ADR-0003](0003-a-four-page-calling-card.md) withdraws publication work
+entirely: no page offers publication statistics, reviewer response or help
+getting into a journal. A rule about whose name may appear on a published output
+has nothing left to govern once nobody can buy a contribution to a publication.
+
+Nothing of it appears on the site. The paragraph and the three decided cases are
+gone from the pages in both languages, and no page mentions the policy at all —
+mentioning it would invite the enquiries it exists to answer.
+
+It is kept here rather than deleted so that a future reader can see the
+withdrawal was a decision. The reasoning below is still the reasoning: if
+publication work is ever taken on again, this is the rule to start from, and the
+alternative recorded here is still the one to reject. It reads in the present
+tense and describes a site that no longer exists.
 
 ## Context
 
